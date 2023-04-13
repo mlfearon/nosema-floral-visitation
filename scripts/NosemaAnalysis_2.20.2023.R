@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 20 February 2023
+# Last updated: 13 April 2023
 
 
 
@@ -37,12 +37,12 @@ library(here)
 
 
 # set the path to the script relative to the project root directory
-here::i_am("scripts/NosemaAnalysis_2.19.2023.R")
+here::i_am("scripts/NosemaAnalysis_2.20.2023.R")
 
 ###############################
 ### LOAD THE DATA FOR ANALYSIS
 ###############################
-data <- read.csv(here("data/NosemaAnalysis_17Oct2022_18Sremoved.csv"), stringsAsFactors = F)
+data <- read.csv(here("data/NosemaAnalysis_18Sremoved.csv"), stringsAsFactors = F)
 
 head(data)
 summary(data)
@@ -284,6 +284,9 @@ data_Apis$Native_visits_z <- as.numeric(scale(log(data_Apis$Native_visits+1)))
 data_Apis$Other_visits_z <- as.numeric(scale(log(data_Apis$Other_visits+1)))
 data_Apis$Native_freq_z <- as.numeric(scale(data_Apis$Native_freq))
 data_Apis$Other_freq_z <- as.numeric(scale(data_Apis$Other_freq))
+data_Apis$APIS_rate_z <- as.numeric(scale(log(data_Apis$APIS_rate+1)))
+data_Apis$BOMB_rate_z <- as.numeric(scale(log(data_Apis$BOMB_rate+1)))
+data_Apis$Other_rate_z <- as.numeric(scale(log(data_Apis$Other_rate+1)))
 data_Apis$APIS_visitdur_z <- as.numeric(scale(log(data_Apis$APIS_visitdur+1)))
 data_Apis$BOMB_visitdur_z <- as.numeric(scale(log(data_Apis$BOMB_visitdur+1)))
 data_Apis$Other_visitdur_z <- as.numeric(scale(log(data_Apis$Other_visitdur+1)))
@@ -299,6 +302,21 @@ data_Apis$Other_visitdur2_z <- as.numeric(scale(log(data_Apis$Other_visitdur2+1)
 data_Apis$Other_visitdur3_z <- as.numeric(scale(log(data_Apis$Other_visitdur3+1)))
 data_Apis$Other_visitdur4_z <- as.numeric(scale(log(data_Apis$Other_visitdur4+1)))
 data_Apis$Other_visitdur5_z <- as.numeric(scale(log(data_Apis$Other_visitdur5+1)))
+data_Apis$APIS_dur_z <- as.numeric(scale(log(data_Apis$APIS_dur+1)))
+data_Apis$BOMB_dur_z <- as.numeric(scale(log(data_Apis$BOMB_dur+1)))
+data_Apis$Other_dur_z <- as.numeric(scale(log(data_Apis$Other_dur+1)))
+data_Apis$APIS_dur2_z <- as.numeric(scale(log(data_Apis$APIS_dur2+1)))
+data_Apis$APIS_dur3_z <- as.numeric(scale(log(data_Apis$APIS_dur3+1)))
+data_Apis$APIS_dur4_z <- as.numeric(scale(log(data_Apis$APIS_dur4+1)))
+data_Apis$APIS_dur5_z <- as.numeric(scale(log(data_Apis$APIS_dur5+1)))
+data_Apis$BOMB_dur2_z <- as.numeric(scale(log(data_Apis$BOMB_dur2+1)))
+data_Apis$BOMB_dur3_z <- as.numeric(scale(log(data_Apis$BOMB_dur3+1)))
+data_Apis$BOMB_dur4_z <- as.numeric(scale(log(data_Apis$BOMB_dur4+1)))
+data_Apis$BOMB_dur5_z <- as.numeric(scale(log(data_Apis$BOMB_dur5+1)))
+data_Apis$Other_dur2_z <- as.numeric(scale(log(data_Apis$Other_dur2+1)))
+data_Apis$Other_dur3_z <- as.numeric(scale(log(data_Apis$Other_dur3+1)))
+data_Apis$Other_dur4_z <- as.numeric(scale(log(data_Apis$Other_dur4+1)))
+data_Apis$Other_dur5_z <- as.numeric(scale(log(data_Apis$Other_dur5+1)))
 
 
 
@@ -366,6 +384,9 @@ summary(fit28a) # duration of petal only visits
 summary(fit28b) # duration of nectar only visits
 summary(fit28c) # duration of pollen only visits
 summary(fit28d) # duration of pollen+nectar visits
+
+
+
 
 
 
