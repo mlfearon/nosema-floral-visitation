@@ -1160,7 +1160,7 @@ me_BombPrev_ApisRate$ApisRate <- t((t(me_BombPrev_ApisRate$x) * ApisRateB_sd) + 
 me_ApisRate <- rbind(me_ApisPrev_ApisRate, me_BombPrev_ApisRate)
 
 
-# plot of Apis visit number vs nosema prevalence
+# plot of Apis visit rate vs nosema prevalence
 prev_ApisRate <- ggplot(me_ApisRate, aes(x = ApisRate, y = predicted)) +
   scale_fill_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
   scale_color_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
@@ -1335,3 +1335,203 @@ cvdPlot(prev_fig4)
 
 
 
+
+#################################
+#### Bombus visit number figure
+#################################
+# Nosema in Apis
+me_ApisPrev_BombusNum <- ggpredict(fit_Apis_visits, c("BOMB_visits_z"))
+plot(me_ApisPrev_BombusNum, add.data = T)
+me_ApisPrev_BombusNum$Host_Species <- "Apis"
+
+# recalculate original Bombus visit number 
+me_ApisPrev_BombusNum$x # scaled Bombus visit number 
+BombusNumA_mean <- mean(log(data_Apis$BOMB_visits+1)) # mean of original Bombus visit number from disease data set
+BombusNumA_sd <- sd(log(data_Apis$BOMB_visits+1)) # sd of original Bombus visit number from disease data set
+
+me_ApisPrev_BombusNum$BombusVisits <- t((t(me_ApisPrev_BombusNum$x) * BombusNumA_sd) + BombusNumA_mean)
+
+# Nosema in Bombus
+me_BombPrev_BombusNum <- ggpredict(fit_Bombus_visits, c("BOMB_visits_z"))
+plot(me_BombPrev_BombusNum, add.data = T)
+me_BombPrev_BombusNum$Host_Species <- "Bombus"
+
+# recalculate original Bombus visit number 
+me_BombPrev_BombusNum$x # scaled Bombus visit number 
+BombusNumB_mean <- mean(log(data_Bombus$BOMB_visits+1)) # mean of original Bombus visit number from disease data set
+BombusNumB_sd <- sd(log(data_Bombus$BOMB_visits+1)) # sd of original Bombus visit number from disease data set
+
+me_BombPrev_BombusNum$BombusVisits <- t((t(me_BombPrev_BombusNum$x) * BombusNumB_sd) + BombusNumB_mean)
+
+
+# combine by rows
+me_BombusNum <- rbind(me_ApisPrev_BombusNum, me_BombPrev_BombusNum)
+
+
+# plot of Bombus visit number vs nosema prevalence
+prev_BombusNum <- ggplot(me_BombusNum, aes(x = BombusVisits, y = predicted)) +
+  scale_fill_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  scale_color_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
+  scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
+  labs(color = "Species", tag = "a", x = bquote(atop("Avg. Number of", "Bumblebee Visits (per 30 min)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  ylim(0,1) +
+  xlim(0,3) +
+  theme_classic() +
+  theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
+        legend.text = element_text(size = 8), legend.title = element_text(size = 8))
+print(prev_BombusNum)
+
+#################################
+#### Other visit number figure
+#################################
+# Nosema in Apis
+me_ApisPrev_OtherNum <- ggpredict(fit_Apis_visits, c("Other_visits_z"))
+plot(me_ApisPrev_OtherNum, add.data = T)
+me_ApisPrev_OtherNum$Host_Species <- "Apis"
+
+# recalculate original Other visit number 
+me_ApisPrev_OtherNum$x # scaled Other visit number 
+OtherNumA_mean <- mean(log(data_Apis$Other_visits+1)) # mean of original Other visit number from disease data set
+OtherNumA_sd <- sd(log(data_Apis$Other_visits+1)) # sd of original Other visit number from disease data set
+
+me_ApisPrev_OtherNum$OtherVisits <- t((t(me_ApisPrev_OtherNum$x) * OtherNumA_sd) + OtherNumA_mean)
+
+# Nosema in Other
+me_BombPrev_OtherNum <- ggpredict(fit_Bombus_visits, c("Other_visits_z"))
+plot(me_BombPrev_OtherNum, add.data = T)
+me_BombPrev_OtherNum$Host_Species <- "Bombus"
+
+# recalculate original Other visit number 
+me_BombPrev_OtherNum$x # scaled Other visit number 
+OtherNumB_mean <- mean(log(data_Bombus$Other_visits+1)) # mean of original Other visit number from disease data set
+OtherNumB_sd <- sd(log(data_Bombus$Other_visits+1)) # sd of original Other visit number from disease data set
+
+me_BombPrev_OtherNum$OtherVisits <- t((t(me_BombPrev_OtherNum$x) * OtherNumB_sd) + OtherNumB_mean)
+
+
+# combine by rows
+me_OtherNum <- rbind(me_ApisPrev_OtherNum, me_BombPrev_OtherNum)
+
+
+# plot of Other visit number vs nosema prevalence
+prev_OtherNum <- ggplot(me_OtherNum, aes(x = OtherVisits, y = predicted)) +
+  scale_fill_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  scale_color_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
+  scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
+  labs(color = "Species", tag = "b", x = bquote(atop("Avg. Number of Other", "Pollinator Visits (per 30 min)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  ylim(0,1) +
+  theme_classic() +
+  theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
+        legend.text = element_text(size = 8), legend.title = element_text(size = 8))
+print(prev_OtherNum)
+
+
+
+#################################
+#### Bombus duration per visit pollen + nectar figure
+#################################
+# Nosema in Apis
+me_ApisPrev_BombusDur_PN <- ggpredict(fit_Apis_visitdur5, c("BOMB_visitdur5_z"))
+plot(me_ApisPrev_BombusDur_PN, add.data = T)
+me_ApisPrev_BombusDur_PN$Host_Species <- "Apis"
+
+# recalculate original Bombus duration per visit pollen + nectar 
+me_ApisPrev_BombusDur_PN$x # scaled Bombus duration per visit pollen + nectar 
+BombusDur5A_mean <- mean(log(data_Apis$BOMB_visitdur5+1)) # mean of original Bombus duration per visit pollen + nectar from disease data set
+BombusDur5A_sd <- sd(log(data_Apis$BOMB_visitdur5+1)) # sd of original Bombus duration per visit pollen + nectar from disease data set
+
+me_ApisPrev_BombusDur_PN$BombusVisitDur5 <- t((t(me_ApisPrev_BombusDur_PN$x) * BombusDur5A_sd) + BombusDur5A_mean)
+
+# Nosema in Bombus
+me_BombPrev_BombusDur_PN <- ggpredict(fit_Bombus_visitdur5, c("BOMB_visitdur5_z"))
+plot(me_BombPrev_BombusDur_PN, add.data = T)
+me_BombPrev_BombusDur_PN$Host_Species <- "Bombus"
+
+# recalculate original Bombus duration per visit pollen + nectar 
+me_BombPrev_BombusDur_PN$x # scaled Bombus duration per visit pollen + nectar 
+BombusDur5B_mean <- mean(log(data_Bombus$BOMB_visitdur5+1)) # mean of original Bombus duration per visit pollen + nectar from disease data set
+BombusDur5B_sd <- sd(log(data_Bombus$BOMB_visitdur5+1)) # sd of original Bombus duration per visit pollen + nectar from disease data set
+
+me_BombPrev_BombusDur_PN$BombusVisitDur5 <- t((t(me_BombPrev_BombusDur_PN$x) * BombusDur5B_sd) + BombusDur5B_mean)
+
+
+# combine by rows
+me_BombusDur5 <- rbind(me_ApisPrev_BombusDur_PN, me_BombPrev_BombusDur_PN)
+
+
+# plot of Bombus duration per visit pollen + nectar vs nosema prevalence
+prev_BombusDur5 <- ggplot(me_BombusDur5, aes(x = BombusVisitDur5, y = predicted)) +
+  scale_fill_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  scale_color_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
+  scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
+  labs(color = "Species", tag = "c", x = bquote(atop("Avg. Duration of Bumblebee", "Pollen + Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  ylim(0,1) +
+  xlim(0, 4) +
+  theme_classic() +
+  theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
+        legend.text = element_text(size = 8), legend.title = element_text(size = 8))
+print(prev_BombusDur5)
+
+#################################
+#### Other duration per visit pollen + nectar figure
+#################################
+# Nosema in Apis
+me_ApisPrev_OtherDur_PN <- ggpredict(fit_Apis_visitdur5, c("Other_visitdur5_z"))
+plot(me_ApisPrev_OtherDur_PN, add.data = T)
+me_ApisPrev_OtherDur_PN$Host_Species <- "Apis"
+
+# recalculate original Other duration per visit pollen + nectar 
+me_ApisPrev_OtherDur_PN$x # scaled Other duration per visit pollen + nectar 
+OtherDur5A_mean <- mean(log(data_Apis$Other_visitdur5+1)) # mean of original Other duration per visit pollen + nectar from disease data set
+OtherDur5A_sd <- sd(log(data_Apis$Other_visitdur5+1)) # sd of original Other duration per visit pollen + nectar from disease data set
+
+me_ApisPrev_OtherDur_PN$OtherVisitDur5 <- t((t(me_ApisPrev_OtherDur_PN$x) * OtherDur5A_sd) + OtherDur5A_mean)
+
+# Nosema in Other
+me_BombPrev_OtherDur_PN <- ggpredict(fit_Bombus_visitdur5, c("Other_visitdur5_z"))
+plot(me_BombPrev_OtherDur_PN, add.data = T)
+me_BombPrev_OtherDur_PN$Host_Species <- "Bombus"
+
+# recalculate original Other duration per visit pollen + nectar 
+me_BombPrev_OtherDur_PN$x # scaled Other duration per visit pollen + nectar 
+OtherDur5B_mean <- mean(log(data_Bombus$Other_visitdur5+1)) # mean of original Other duration per visit pollen + nectar from disease data set
+OtherDur5B_sd <- sd(log(data_Bombus$Other_visitdur5+1)) # sd of original Other duration per visit pollen + nectar from disease data set
+
+me_BombPrev_OtherDur_PN$OtherVisitDur5 <- t((t(me_BombPrev_OtherDur_PN$x) * OtherDur5B_sd) + OtherDur5B_mean)
+
+
+# combine by rows
+me_OtherDur5 <- rbind(me_ApisPrev_OtherDur_PN, me_BombPrev_OtherDur_PN)
+
+
+# plot of Other duration per visit pollen + nectar vs nosema prevalence
+prev_OtherDur5 <- ggplot(me_OtherDur5, aes(x = OtherVisitDur5, y = predicted)) +
+  scale_fill_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  scale_color_manual(values = Tol_muted2, name = "Species", labels = c(bquote("Honeybees"), bquote("Bumblebees"))) +
+  geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
+  scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
+  labs(color = "Species", tag = "d", x = bquote(atop("Avg. Duration of Other Pollinator", "Pollen + Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  ylim(0,1) +
+  xlim(-0.1, 4) +
+  theme_classic() +
+  theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
+        legend.text = element_text(size = 8), legend.title = element_text(size = 8))
+print(prev_OtherDur5)
+
+
+###############################
+### Full figure of Bombus and Other pollinator visit number and duration per vistit on pollen+nectar
+###############################
+# Grid of both isit rate and sum duration plots
+prev_fig5 <- grid_arrange_shared_legend(prev_BombusNum, prev_OtherNum, prev_BombusDur5, prev_OtherDur5, nrow=1, ncol = 4, position = "right")
+ggsave(here("figures/Fig5.tiff"), plot = prev_fig5, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
+
+# color blind check
+cvdPlot(prev_fig4)
