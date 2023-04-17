@@ -18,6 +18,7 @@ setwd("C:/Users/Maryellen/Documents/School/Honors Thesis/Manuscript/Analysis")
 
 # Import libraries needed 
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(vegan)
 library(epiR)
@@ -170,6 +171,77 @@ write.csv(avgs_perSite, "tables/MeanBeeVisitationPerSite.csv", quote = F)
 
 
 
+######
+# Figures of Apis vs Bombus visitation metrics 
+#####
+
+plot <- ggplot(visitation, aes(x = BOMB_visits, y = APIS_visits)) +
+  geom_jitter(width = 0.3, height = 0.3, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot)
+
+plot2 <- ggplot(avgs, aes(x = BOMB_visits, y = APIS_visits)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot2)
+
+plot3 <- ggplot(visitation, aes(x = BOMB_dur, y = APIS_dur)) +
+  geom_jitter(width = 5, height = 3, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot3)
+
+plot4 <- ggplot(avgs, aes(x = BOMB_dur, y = APIS_dur)) +
+  geom_jitter(width = 5, height = 3, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot4)
+
+plot5 <- ggplot(avgs, aes(x = BOMB_visitdur, y = APIS_visitdur)) +
+  geom_jitter(width = 1, height = 1, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot5)
+
+plot6 <- ggplot(visitation, aes(x = BOMB_dur2, y = APIS_dur2)) +
+  geom_jitter(width = 1, height = 2, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot6)
+
+plot7 <- ggplot(avgs, aes(x = BOMB_dur2, y = APIS_dur2)) +
+  geom_jitter(width = 1, height = 2, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot7)
+
+plot8 <- ggplot(avgs, aes(x = BOMB_visitdur2, y = APIS_visitdur2)) +
+  geom_jitter(width = 0, height = 0, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot8)
+
+
+plot9 <- ggplot(visitation, aes(x = BOMB_dur5, y = APIS_dur5)) +
+  geom_jitter(width = 1, height = 2, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot9)
+
+plot10 <- ggplot(avgs, aes(x = BOMB_dur5, y = APIS_dur5)) +
+  geom_jitter(width = 1, height = 2, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot10)
+
+plot11 <- ggplot(avgs, aes(x = BOMB_visitdur5, y = APIS_visitdur5)) +
+  geom_jitter(width = 0, height = 0, alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, linetype = "dashed")
+print(plot11)
+
 ##############################
 # Manipulate visitation data set to analyze differences in visitation by species
 #############################
@@ -177,9 +249,10 @@ write.csv(avgs_perSite, "tables/MeanBeeVisitationPerSite.csv", quote = F)
 # Data collected per flower
 dim(visitation)
 visitation_bySpp <- visitation %>%
-  pivot_longer()
+  select(FlowerID:behavdur_sec, contains("visits")) %>%
+  pivot_longer(APIS_visits:Other_visits, names_to = "Genus", values_to = "visits")
 
-
+View(visitation_bySpp)
 
 
 
