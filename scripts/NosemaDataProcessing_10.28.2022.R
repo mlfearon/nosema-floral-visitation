@@ -94,6 +94,10 @@ View(visitation)
 
 
 
+cor.test(visitation$APIS_visits, visitation$BOMB_visits)
+cor.test(visitation$APIS_visits, visitation$Other_visits)
+cor.test(visitation$Other_visits, visitation$BOMB_visits)
+
 # average based on visit (1 or 2) to each site
 avgs <- visitation %>%
   group_by(Site, Visit) %>%
@@ -113,7 +117,7 @@ avgs <- visitation %>%
             VisitShannon = mean(VisitShannon))
 View(avgs)
 
-
+hist(avgs$VisitNum)
 
 # add additional visitation variables to data set
 data <- left_join(nosema, avgs, by = c("Site", "Visit"))
@@ -248,23 +252,31 @@ print(plot11)
 
 # Data collected per flower
 dim(visitation)
-visitation_bySpp <- visitation %>%
-  select(FlowerID:behavdur_sec, contains("visits")) %>%
-  pivot_longer(APIS_visits:Other_visits, names_to = "Genus", values_to = "visits")
+vistation_meta <- visitation %>%
+  select(FlowerID:behavdur_sec)
 
+visitation_bySpp <- visitation %>%
+  select(FlowerID:totdur_sec, matches("APIS"), matches("BOMB"), matches("Other")) %>%
+  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
+  filter(Genus != "APISBOMB", visit_metric != "freq") %>%
+  pivot_wider(names_from = "visit_metric", values_from = "value")
+dim(visitation_bySpp)
 View(visitation_bySpp)
 
+# export file for visitation analyses
+write.csv(visitation_bySpp, "data/Visitation_bySpp.csv", quote = F)
 
+avgs_bySpp <- avgs %>%
+  select(Site:Visit, matches("APIS"), matches("BOMB"), matches("Other")) %>%
+  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
+  filter(visit_metric != "freq") %>%
+  pivot_wider(names_from = "visit_metric", values_from = "value")
+View(avgs_bySpp)
 
+# export file for visitation analyses
+write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
 
-###############################
-# Tests of differences in visitation metrics between species (Apis, Bombus, Other)
-# For each type of visitation metric, compare whether we get the same results from the per flower (as collected) and averaged per site/visit and per site
-##############################
-
-
-
-
+ 
 
 
 
