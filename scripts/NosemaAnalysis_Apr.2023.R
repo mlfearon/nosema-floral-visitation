@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 13 April 2023
+# Last updated: 19 April 2023
 
 
 
@@ -37,7 +37,7 @@ library(here)
 
 
 # set the path to the script relative to the project root directory
-here::i_am("scripts/NosemaAnalysis_2.20.2023.R")
+here::i_am("scripts/NosemaAnalysis_Apr.2023.R")
 
 ###############################
 ### LOAD THE DATA FOR ANALYSIS
