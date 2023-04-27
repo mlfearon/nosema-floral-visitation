@@ -7,7 +7,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 26 April 2023
+# Last updated: 27 April 2023
 
 
 
@@ -25,7 +25,7 @@ library(epiR)
 library(here)
 
 # set the path to the script relative to the project root directory
-here::i_am("scripts/NosemaAnalysis_2.20.2023.R")
+here::i_am("scripts/NosemaDataProcessing.R")
 
 
 # load binary nosema data
@@ -323,7 +323,7 @@ avgs_bySpp <- avgs %>%
 View(avgs_bySpp)
 
 # export file for visitation analyses
-write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
+#write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
 
  
 
