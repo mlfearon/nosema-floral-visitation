@@ -51,6 +51,10 @@ nosema <- filter(nosema, Site != "SP")
 
 unique(nosema$Site)
 
+# remove unnecessary columns
+nosema <- select(nosema, Sample:Sex)
+
+
 
 # get unique Latitude and Longitude per site
 LatLong <- nosema %>% select(Site, Lat, Long) %>%
@@ -183,8 +187,10 @@ write.csv(data, "data/NosemaAnalysis.csv", quote = F)
 
 
 
+##################################
+# Appendix S1: Table S3 in manuscript
+#################################
 
-# Table S3 in manuscript
 # create summary table of visitation factors for each field site
 avgs_perSite <- visitation %>%
   group_by(Site) %>%
@@ -223,6 +229,38 @@ write.csv(avgs_perSite, "tables/MeanBeeVisitationPerSite.csv", quote = F)
 
 
 
+##############################
+# Manipulate visitation data set to analyze differences in visitation by species
+#############################
+
+# Data collected per flower
+dim(visitation)
+vistation_meta <- visitation %>%
+  select(FlowerID:behavdur_sec)
+
+visitation_bySpp <- visitation %>%
+  select(FlowerID:totdur_sec, matches("APIS"), matches("BOMB"), matches("Other")) %>%
+  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
+  filter(Genus != "APISBOMB", visit_metric != "freq") %>%
+  pivot_wider(names_from = "visit_metric", values_from = "value")
+visitation_bySpp <- full_join(visitation_bySpp, LatLong)
+dim(visitation_bySpp)
+View(visitation_bySpp)
+
+# export file for visitation analyses
+write.csv(visitation_bySpp, "data/Visitation_bySpp.csv", quote = F)
+
+avgs_bySpp <- avgs %>%
+  select(Site:Visit, matches("APIS"), matches("BOMB"), matches("Other")) %>%
+  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
+  filter(visit_metric != "freq") %>%
+  pivot_wider(names_from = "visit_metric", values_from = "value")
+View(avgs_bySpp)
+
+# export file for visitation analyses
+#write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
+
+ 
 ######
 # Figures of Apis vs Bombus visitation metrics 
 #####
@@ -293,39 +331,5 @@ plot11 <- ggplot(avgs, aes(x = BOMB_visitdur5, y = APIS_visitdur5)) +
   geom_smooth(method = "lm") +
   geom_abline(slope = 1, linetype = "dashed")
 print(plot11)
-
-##############################
-# Manipulate visitation data set to analyze differences in visitation by species
-#############################
-
-# Data collected per flower
-dim(visitation)
-vistation_meta <- visitation %>%
-  select(FlowerID:behavdur_sec)
-
-visitation_bySpp <- visitation %>%
-  select(FlowerID:totdur_sec, matches("APIS"), matches("BOMB"), matches("Other")) %>%
-  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
-  filter(Genus != "APISBOMB", visit_metric != "freq") %>%
-  pivot_wider(names_from = "visit_metric", values_from = "value")
-visitation_bySpp <- full_join(visitation_bySpp, LatLong)
-dim(visitation_bySpp)
-View(visitation_bySpp)
-
-# export file for visitation analyses
-write.csv(visitation_bySpp, "data/Visitation_bySpp.csv", quote = F)
-
-avgs_bySpp <- avgs %>%
-  select(Site:Visit, matches("APIS"), matches("BOMB"), matches("Other")) %>%
-  pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
-  filter(visit_metric != "freq") %>%
-  pivot_wider(names_from = "visit_metric", values_from = "value")
-View(avgs_bySpp)
-
-# export file for visitation analyses
-#write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
-
- 
-
 
 
