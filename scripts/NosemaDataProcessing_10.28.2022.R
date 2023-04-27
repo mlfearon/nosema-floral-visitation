@@ -7,7 +7,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 13 April 2023
+# Last updated: 26 April 2023
 
 
 
@@ -29,7 +29,7 @@ here::i_am("scripts/NosemaAnalysis_2.20.2023.R")
 
 
 # load binary nosema data
-nosema <- read.csv("data/Nosema_pos_update_missing18Sremoved.csv", stringsAsFactors = F)
+nosema <- read.csv("data/Nosema_pos.csv", stringsAsFactors = F)
 head(nosema)
 summary(nosema)
 dim(nosema)
@@ -50,6 +50,16 @@ nosema <- filter(nosema, X18S == 1)
 nosema <- filter(nosema, Site != "SP")
 
 unique(nosema$Site)
+
+
+# get unique Latitude and Longitude per site
+LatLong <- nosema %>% select(Site, Lat, Long) %>%
+  group_by(Site) %>%
+  summarize(Site = unique(Site),
+            Lat = unique(Lat),
+            Long = unique(Long))
+LatLong
+
 
 
 ###### add in visitation covariates to data set 
@@ -89,14 +99,47 @@ spp_visits <- visitation %>%
   select(APIS_visits:TRIE_visits)
 visitation$VisitShannon = diversity(spp_visits, "shannon")
 
+# calculate the total duration per all bee visits
+visitation$DurationPerVisit <- visitation$VisitDur/(visitation$VisitNum)
+visitation$DurationPerVisit[is.na(visitation$DurationPerVisit)] <- 0  # convert NAs where there were zero visits to zero
 
 View(visitation)
 
 
 
-cor.test(visitation$APIS_visits, visitation$BOMB_visits)
-cor.test(visitation$APIS_visits, visitation$Other_visits)
-cor.test(visitation$Other_visits, visitation$BOMB_visits)
+## Correlation between visit number and total duration (summed seconds of all visits)
+cor.test(visitation$VisitNum, visitation$VisitDur)
+
+## Correlation between visit number and total duration per visit (seconds/visits)
+cor.test(visitation$VisitNum, visitation$DurationPerVisit)
+
+
+# Ranges of visit number for each species
+range(visitation$APIS_visits)
+range(visitation$BOMB_visits)
+range(visitation$Other_visits)
+
+
+# Ranges of total duration per visit for each species (seconds per visit)
+range(visitation$APIS_visitdur)
+range(visitation$BOMB_visitdur)
+range(visitation$Other_visitdur)
+
+# Ranges of total duration per visit on petals for each species (seconds per visit)
+range(visitation$APIS_visitdur2)
+range(visitation$BOMB_visitdur2)
+range(visitation$Other_visitdur2)
+
+# Ranges of total duration per visit on pollen for each species (seconds per visit)
+range(visitation$APIS_visitdur4)
+range(visitation$BOMB_visitdur4)
+range(visitation$Other_visitdur4)
+
+# Ranges of total duration per visit on pollen+nectar for each species (seconds per visit)
+range(visitation$APIS_visitdur5)
+range(visitation$BOMB_visitdur5)
+range(visitation$Other_visitdur5)
+
 
 # average based on visit (1 or 2) to each site
 avgs <- visitation %>%
@@ -136,12 +179,12 @@ unique(data$Site)
 
 
 # Data file to be used in analyses
-write.csv(data, "data/NosemaAnalysis_18Sremoved.csv", quote = F)
+write.csv(data, "data/NosemaAnalysis.csv", quote = F)
 
 
 
 
-# Table 2 in manuscript
+# Table S3 in manuscript
 # create summary table of visitation factors for each field site
 avgs_perSite <- visitation %>%
   group_by(Site) %>%
@@ -170,8 +213,13 @@ avgs_perSite <- visitation %>%
 View(avgs_perSite)
 
 
+
+##########################
+## Appendix S1, Table S3
+##########################
 # export file to make the table
 write.csv(avgs_perSite, "tables/MeanBeeVisitationPerSite.csv", quote = F)
+
 
 
 
@@ -260,6 +308,7 @@ visitation_bySpp <- visitation %>%
   pivot_longer(APIS_visits:Other_visitdur5, names_to = c("Genus", "visit_metric"), names_sep = "_", values_to = "value") %>%
   filter(Genus != "APISBOMB", visit_metric != "freq") %>%
   pivot_wider(names_from = "visit_metric", values_from = "value")
+visitation_bySpp <- full_join(visitation_bySpp, LatLong)
 dim(visitation_bySpp)
 View(visitation_bySpp)
 
