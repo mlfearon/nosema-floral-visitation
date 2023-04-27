@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 19 April 2023
+# Last updated: 26 April 2023
 
 
 
@@ -42,7 +42,7 @@ here::i_am("scripts/NosemaAnalysis_Apr.2023.R")
 ###############################
 ### LOAD THE DATA FOR ANALYSIS
 ###############################
-data <- read.csv(here("data/NosemaAnalysis_18Sremoved.csv"), stringsAsFactors = F)
+data <- read.csv(here("data/NosemaAnalysis.csv"), stringsAsFactors = F)
 
 head(data)
 summary(data)
@@ -51,6 +51,16 @@ summary(data)
 data$Year <- as.character(data$Year)
 data$Visit <- as.character(data$Visit)
 
+
+#########################################
+#  Appendix S1, Table S4: Count of Number tested and Nosema positive per genus per visit per site
+#########################################
+sum.data <- data %>%
+  dplyr::group_by(Genus, Site, Visit) %>%
+  summarise(N_tested = length(Nosema),
+          N_postive = sum(Nosema))
+
+write.csv(sum.data, file = "tables/AppendixTableS4_Counts_of_tested+pos_perSiteVisitGenus.csv", quote = F)
 
 
 #####################################
@@ -177,7 +187,7 @@ Bombus_site_prev
 
 
 ##########################
-# Appendix Table S7
+# Appendix S1, Table S10
 ##########################
 # combine matrices into a data frame and convert data to numeric classes
 site_prev <- as.data.frame(rbind(Apis_site_prev, Bombus_site_prev))
@@ -188,13 +198,18 @@ site_prev$Nosema_Lower <- as.numeric(site_prev$Nosema_Lower)
 site_prev$Nosema_Upper <- as.numeric(site_prev$Nosema_Upper)
 
 
-write.csv(site_prev, file = "tables/AppendixTableS7_Nosema_Predicted_Prevalence_By_Host_and_Site.csv", quote = F)
+write.csv(site_prev, file = "tables/AppendixTableS10_Nosema_Predicted_Prevalence_By_Host_and_Site.csv", quote = F)
+
+
+
+
+
 
 
 
 
 ####################
-# Figure 1
+# Appendix S1: Figure S2
 #################### 
 
 ###### Figure of Nosema prevalence per site for each species
@@ -212,7 +227,7 @@ prev_site_plot <- ggplot(site_prev, aes(x = Site, y = Nosema_prev, color = Genus
   theme(axis.text = element_text(size=9, color = "black"), axis.title = element_text(size=10, color="black"),
         legend.text = element_text(size = 9), legend.title = element_text(size = 9))
 print(prev_site_plot)
-ggsave(here("figures/Fig1_NosemaPrev_BY_Site_BOTH_Hosts.tiff"), plot = prev_site_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+ggsave(here("figures/FigS2_NosemaPrev_BY_Site_BOTH_Hosts.tiff"), plot = prev_site_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 
 
@@ -317,6 +332,7 @@ data_Apis$Other_dur5_z <- as.numeric(scale(log(data_Apis$Other_dur5+1)))
 
 # Model of visit number for Nosema in Apis
 fit_Apis_visits <- glmer(Nosema ~ APIS_visits_z + BOMB_visits_z + Other_visits_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
+#fit_Apis_visits <- glmer(Nosema ~ APIS_visits_z + BOMB_visits_z + Other_visits_z + Visit + (1|Site), family = binomial, data = data_Apis)
 summary(fit_Apis_visits)
 vif(fit_Apis_visits)
 vif.mer(fit_Apis_visits)
@@ -324,9 +340,13 @@ plot(fit_Apis_visits)
 qqnorm(resid(fit_Apis_visits))
 qqline(resid(fit_Apis_visits))
 overdisp_fun(fit_Apis_visits)
+testDispersion(fit_Apis_visits)
+testZeroInflation(fit_Apis_visits)
+ApisVisit_simResid <- simulateResiduals(fittedModel = fit_Apis_visits)
+plot(ApisVisit_simResid) 
 
 # Model of visit rate for Nosema in Apis  (not shown in manuscript)
-fit_Apis_rate <- glmer(Nosema ~ APIS_rate_z + BOMB_rate_z + Other_rate_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
+fit_Apis_rate <- glmer(Nosema ~ APIS_rate_z + BOMB_rate_z + Other_rate_z + Visit + (1|Site), family = binomial, data = data_Apis)
 summary(fit_Apis_rate)
 vif(fit_Apis_rate)
 vif.mer(fit_Apis_rate)
@@ -334,6 +354,20 @@ plot(fit_Apis_rate)
 qqnorm(resid(fit_Apis_rate))
 qqline(resid(fit_Apis_rate))
 overdisp_fun(fit_Apis_rate)
+testDispersion(fit_Apis_rate)
+testZeroInflation(fit_Apis_rate)
+ApisRate_simResid <- simulateResiduals(fittedModel = fit_Apis_rate)
+plot(ApisRate_simResid) 
+plot(fit_Apis_rate_resid2)
+
+# Nosema in Apis vs visitation rate
+fit_Apis_rate_resid <- simulateResiduals(fit_Apis_rate)
+fit_Apis_rate_resid2 <- recalculateResiduals(fit_Apis_rate_resid, group = data_Apis$Site) # group residuals by site
+testSpatialAutocorrelation(fit_Apis_rate_resid2, unique(data_Apis$Long), unique(data_Apis$Lat))
+testSpatialAutocorrelation(fit_Apis_rate_resid, data_Apis$Long, data_Apis$Lat)
+# significant spatial autocorrelation! 
+
+
 
 # Spatial autocorrelation test below indicates that there is significant spatial autocorrelation
 # Update visit rate model for Nosema in Apis
@@ -342,6 +376,19 @@ fit_Apis_rate_update <- fitme(Nosema ~ APIS_rate_z + BOMB_rate_z + Other_rate_z 
 summary(fit_Apis_rate_update)
 AIC(fit_Apis_rate_update)
 overdisp_fun(fit_Apis_rate_update)
+
+dd <- dist(data_Apis[,c("Lat","Long")])*111.139  # Multiply the degrees of separation of longitude and latitude by 111.139 to get the corresponding linear distances in kilometers.
+mm <- MaternCorr(dd, nu = 16.6, rho = 16.87355)
+plot(as.numeric(dd), as.numeric(mm), xlab = "Distance between pairs of location [in km]", ylab = "Estimated correlation")
+# Sites less than 10 km away from each other are very correlated... looks like mostly within a site there is a lot of correlation, but as you move away, it is essentially zero
+
+
+# UPDATED Nosema in Apis vs visitation rate that corrected for spatial autocorrelation in the model
+fit_Apis_rate2_resid <- simulateResiduals(fit_Apis_rate_update)
+fit_Apis_rate2_resid2 <- recalculateResiduals(fit_Apis_rate2_resid, group = data_Apis$Site) # group residuals by site
+testSpatialAutocorrelation(fit_Apis_rate2_resid2, unique(data_Apis$Long), unique(data_Apis$Lat))
+# significant spatial autocorrelation!
+
 
 
 
@@ -440,7 +487,7 @@ overdisp_fun(fit_Apis_dur5)
 
 
 ##################################
-## Appendix Table S4: Apis visitation model outputs
+## Appendix S1, Table S7: Honeybee visitation model outputs
 ##################################
 summary(fit_Apis_visits)    # visit number
 summary(fit_Apis_rate)      # visit rate (visit number / total time)
@@ -627,7 +674,7 @@ overdisp_fun(fit_Bombus_dur5)
 
 
 ##################################
-## Appendix Table S5: Bombus visitation model outputs
+## Appendix S1, Table S8: Bumblebee visitation model outputs
 ##################################
 summary(fit_Bombus_visits)    # visit number
 summary(fit_Bombus_rate)      # visit number / total video time
@@ -646,7 +693,7 @@ summary(fit_Bombus_dur5) # sum duration per 30 min of pollen+nectar visits
 
 
 ##################################
-## Appendix Table S6: Moran's I
+## Appendix S1, Table S9: Moran's I
 ##################################
 #Test for spatial autocorrelation for all Nosema in Apis and Bombus models
 
@@ -1064,7 +1111,7 @@ prev_ApisDur2 <- ggplot(me_ApisDur2, aes(x = ApisDur2, y = predicted)) +
   geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
   scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
-  labs(color = "Species", tag = "a", x = bquote("Avg. Duration of Honeybee Petal visits (seconds/visit)"), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  labs(color = "Species", tag = "a", x = bquote(atop("Avg. Duration of Honeybee", "Petal visits (seconds/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
   ylim(0,1) +
   theme_classic() +
   theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
@@ -1110,7 +1157,7 @@ prev_BombusDur2 <- ggplot(me_BombusDur2, aes(x = BombusDur2, y = predicted)) +
   geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
   scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
-  labs(color = "Species", tag = "b", x = bquote("Avg. Duration of Bumblebee Petal Visits (seconds/visit)"), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  labs(color = "Species", tag = "b", x = bquote(atop("Avg. Duration of Bumblebee", "Petal Visits (seconds/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
   ylim(0,1) +
   theme_classic() +
   theme(axis.text = element_text(size=8, color = "black"), axis.title = element_text(size=8, color="black"),
@@ -1120,11 +1167,11 @@ print(prev_BombusDur2)
 
 
 # Grid of both Apis and bombus duration on PETALS
-prev_fig3 <- grid_arrange_shared_legend(prev_ApisDur2, prev_BombusDur2, nrow=1, ncol = 2, position = "right")
-ggsave("figures/Fig3.tiff", plot = prev_fig3, dpi = 600, width = 6.5, height = 3, units = "in", compression="lzw")
+prev_figS4 <- grid_arrange_shared_legend(prev_ApisDur2, prev_BombusDur2, nrow=1, ncol = 2, position = "right")
+ggsave("figures/FigS4.tiff", plot = prev_figS4, dpi = 600, width = 6.5, height = 3, units = "in", compression="lzw")
 
 # color blind check
-cvdPlot(prev_fig3)
+cvdPlot(prev_figS2)
 
 
 
@@ -1323,11 +1370,11 @@ print(prev_ApisSumDur_PN)
 
 
 ###############################
-### Full figure of Visit rate and sum duration plots
+### Full Figure of Visit rate and sum duration plots [NOT IN MANUSCRIPT]
 ###############################
 # Grid of both isit rate and sum duration plots
-prev_fig4 <- grid_arrange_shared_legend(prev_ApisRate, prev_ApisSumDur, prev_BombusSumDur2, prev_ApisSumDur_PN, nrow=1, ncol = 4, position = "right")
-ggsave(here("figures/Fig4.tiff"), plot = prev_fig4, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
+prev_fig5 <- grid_arrange_shared_legend(prev_ApisRate, prev_ApisSumDur, prev_BombusSumDur2, prev_ApisSumDur_PN, nrow=1, ncol = 4, position = "right")
+ggsave(here("figures/Fig5.tiff"), plot = prev_fig5, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
 
 # color blind check
 cvdPlot(prev_fig4)
@@ -1470,7 +1517,7 @@ prev_BombusDur5 <- ggplot(me_BombusDur5, aes(x = BombusVisitDur5, y = predicted)
   geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
   scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
-  labs(color = "Species", tag = "c", x = bquote(atop("Avg. Duration of Bumblebee", "Pollen + Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  labs(color = "Species", tag = "c", x = bquote(atop("Avg. Duration of Bumblebee", "Pollen+Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
   ylim(0,1) +
   xlim(0, 4) +
   theme_classic() +
@@ -1517,7 +1564,7 @@ prev_OtherDur5 <- ggplot(me_OtherDur5, aes(x = OtherVisitDur5, y = predicted)) +
   geom_line(aes(color = Host_Species, linetype = Host_Species), size = 1.2) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = Host_Species), alpha = 0.2) +
   scale_linetype_manual(values=c("dashed", "dashed"), guide = "none") +
-  labs(color = "Species", tag = "d", x = bquote(atop("Avg. Duration of Other Pollinator", "Pollen + Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
+  labs(color = "Species", tag = "d", x = bquote(atop("Avg. Duration of Other Pollinator", "Pollen+Nectar Visits (second/visit)")), y = bquote(italic(V.) ~ italic(ceranae) ~ " Prevalence")) +
   ylim(0,1) +
   xlim(-0.1, 4) +
   theme_classic() +
@@ -1527,11 +1574,11 @@ print(prev_OtherDur5)
 
 
 ###############################
-### Full figure of Bombus and Other pollinator visit number and duration per vistit on pollen+nectar
+### Full figure 3 of Bombus and Other pollinator visit number and duration per vistit on pollen+nectar
 ###############################
 # Grid of both isit rate and sum duration plots
-prev_fig5 <- grid_arrange_shared_legend(prev_BombusNum, prev_OtherNum, prev_BombusDur5, prev_OtherDur5, nrow=1, ncol = 4, position = "right")
-ggsave(here("figures/Fig5.tiff"), plot = prev_fig5, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
+prev_fig3 <- grid_arrange_shared_legend(prev_BombusNum, prev_OtherNum, prev_BombusDur5, prev_OtherDur5, nrow=1, ncol = 4, position = "right")
+ggsave(here("figures/Fig3.tiff"), plot = prev_fig3, dpi = 600, width = 10, height = 3, units = "in", compression="lzw")
 
 # color blind check
-cvdPlot(prev_fig4)
+cvdPlot(prev_fig3)
