@@ -1,0 +1,15 @@
+,,,,Honeybees,,Bumblebees,,Combined,
+,Genus,Site,Visit,N_tested,N_postive,N_tested,N_postive,N_tested,N_postive
+1,Apis,BP,1,8,4,8,7,16,11
+2,Apis,BP,2,8,7,8,8,16,15
+3,Apis,E,1,8,6,7,2,15,8
+4,Apis,E,2,8,4,8,4,16,8
+5,Apis,GT,1,7,3,8,4,15,7
+6,Apis,GT,2,5,5,7,4,12,9
+7,Apis,K,1,3,2,7,4,10,6
+8,Apis,K,2,5,3,8,4,13,7
+9,Apis,PL,1,8,5,7,5,15,10
+10,Apis,PL,1,8,8,8,8,16,16
+,Apis,PR,1,0,0,2,1,2,1
+11,Apis,PR,2,7,4,8,4,15,8
+,,,Total,75,51,86,55,161,106
