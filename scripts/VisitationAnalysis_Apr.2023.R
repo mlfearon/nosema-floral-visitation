@@ -1,17 +1,17 @@
 # Code for the analyses for "Honeybee visitation behavior on shared floral resources 
 # increases Vairimorpha ceranae prevalence in bumblebees"
 
-# Manuscript submitted to: 
+# Manuscript submitted to: Ecology and Evolution
 
 
 # Vairimorpha (=Nosema) ceranae prevalence in Apis and Bombus analysis
 
-# This script includes the full analyses and figures for how pollinator visitation number and duration of visits to flowers
-# impact V. ceranae prevalence in Apis mellifera and Bombus spp. 
+# This script includes the full analyses and figures for how pollinator visitation number and duration per visit to flowers
+# vary based on pollinator group (honeybees, bumblebees, and other pollinators)
 
 
 # Written by: Michelle Fearon
-# Last updated: 19 April 2023
+# Last updated: 27 April 2023
 
 
 # Import libraries needed 
@@ -41,9 +41,6 @@ visitation_bySpp <- read.csv(here("data/Visitation_bySpp.csv"), stringsAsFactors
 head(visitation_bySpp)
 summary(visitation_bySpp)
 
-
-avgs_bySpp <- read.csv(here("data/VisitationAvgs_bySpp.csv"), stringsAsFactors = F)
-head(avgs_bySpp)
 
 ## histograms
 hist(visitation_bySpp$visits)
@@ -88,6 +85,7 @@ grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, 
 }
 
 
+
 ###############################
 # Tests of differences in visitation metrics between species (Apis, Bombus, Other)
 # For each type of visitation metric, compare whether we get the same results from the per flower (as collected) and averaged per site/visit and per site
@@ -98,15 +96,24 @@ grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, 
 # remove one outlier from the Other pollinators that has 136 visits to one flower (many combined species)
 visitation_bySpp_noVisitNumOutlier <- filter(visitation_bySpp, visits < 100)
 
+range(visitation_bySpp_noVisitNumOutlier$visits)
+range(visitation_bySpp$visits)
 visitnum_mod1 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = poisson, data = visitation_bySpp_noVisitNumOutlier)
 visitnum_mod2 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = nbinom2(), data = visitation_bySpp_noVisitNumOutlier)
 AIC(visitnum_mod1, visitnum_mod2)  # negbinomial model has much lower AIC
 summary(visitnum_mod2)
 Anova(visitnum_mod2)
+?Anova
+# tests of model assumptions and diagnostics
 testDispersion(visitnum_mod2)
 testZeroInflation(visitnum_mod2)
-visitnum_simResid1 <- simulateResiduals(fittedModel = visitnum_mod2)
-plot(visitnum_simResid1) 
+
+# spatial autocorrelation test
+visitnum_resid <- simulateResiduals(visitnum_mod2)
+visitnum_resid2 <- recalculateResiduals(visitnum_resid, group = visitation_bySpp_noVisitNumOutlier$Site) # group residuals by site
+testSpatialAutocorrelation(visitnum_resid2, unique(visitation_bySpp_noVisitNumOutlier$Long), unique(visitation_bySpp_noVisitNumOutlier$Lat)) # not sig!
+
+# post hoc test
 visitnum_contrasts <- emmeans(visitnum_mod2, spec = pairwise ~ Genus, type = "response")
 visitnum_contrasts    #  Apis is sig lower than Bombus, but not with Other. Bombus and Other not sig different
 visitnum_contrasts$contrasts
@@ -153,10 +160,16 @@ totdur_mod2 <- glmmTMB(dur ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + G
 AIC(totdur_mod1, totdur_mod2)  # negbinomial model has much lower AIC
 summary(totdur_mod2)
 Anova(totdur_mod2)
+# test of model diagnostics
 testDispersion(totdur_mod2)
 testZeroInflation(totdur_mod2)
-totdur_simResid1 <- simulateResiduals(fittedModel = totdur_mod2)
-plot(totdur_simResid1) 
+
+# spatial autocorrelation test
+totdur_resid <- simulateResiduals(totdur_mod2)
+totdur_resid2 <- recalculateResiduals(totdur_resid, group = visitation_bySpp_noDurOutlier$Site) # group residuals by site
+testSpatialAutocorrelation(totdur_resid2, unique(visitation_bySpp_noDurOutlier$Long), unique(visitation_bySpp_noDurOutlier$Lat)) # not sig!
+
+# post hoc tests
 totdur_contrasts <- emmeans(totdur_mod2, spec = pairwise ~ Genus, type = "response")
 totdur_contrasts     # no sig diff based on genus
 totdur_sig <- tibble::tribble(
@@ -192,10 +205,16 @@ totdur2_mod2 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 +
 AIC(totdur2_mod1, totdur2_mod2)  # poisson model doesn't converge, but the negbinomial model does
 summary(totdur2_mod2)
 Anova(totdur2_mod2)
+# tests of model diagnostics
 testDispersion(totdur2_mod2)
 testZeroInflation(totdur2_mod2)
-totdur2_simResid1 <- simulateResiduals(fittedModel = totdur2_mod2)
-plot(totdur2_simResid1) 
+
+# spatial autocorrelation test
+totdur2_resid <- simulateResiduals(totdur2_mod2)
+totdur2_resid2 <- recalculateResiduals(totdur2_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totdur2_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 totdur2_contrasts <- emmeans(totdur2_mod2, spec = pairwise ~ Genus, type = "response")
 totdur2_contrasts   # Bombus is sig lower than Apis or Other, Apis and Other not sig different
 totdur2_sig <- tibble::tribble(
@@ -231,10 +250,16 @@ totdur5_mod2 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 +
 AIC(totdur5_mod1, totdur5_mod2)
 summary(totdur5_mod2)
 Anova(totdur5_mod2)
+# test of model diagnostics
 testDispersion(totdur5_mod2)
 testZeroInflation(totdur5_mod2)
-totdur5_simResid1 <- simulateResiduals(fittedModel = totdur5_mod2)
-plot(totdur5_simResid1) 
+
+# spatial autocorrelation test
+totdur5_resid <- simulateResiduals(totdur5_mod2)
+totdur5_resid2 <- recalculateResiduals(totdur5_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totdur5_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 totdur5_contrasts <- emmeans(totdur5_mod2, spec = pairwise ~ Genus, type = "response")
 totdur5_contrasts    # No sig diff based on genus
 totdur5_sig <- tibble::tribble(
@@ -275,10 +300,16 @@ visitrate_mod2 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = 
 AIC(visitrate_mod1, visitrate_mod2)  # negbinomial model has much lower AIC
 summary(visitrate_mod2)
 Anova(visitrate_mod2)
+# test of model diagnostics
 testDispersion(visitrate_mod2)
 testZeroInflation(visitrate_mod2)
-visitrate_simResid1 <- simulateResiduals(fittedModel = visitrate_mod2)
-plot(visitrate_simResid1) 
+
+# spatial autocorrelation test
+visitrate_resid <- simulateResiduals(visitrate_mod2)
+visitrate_resid2 <- recalculateResiduals(visitrate_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(visitrate_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 visitrate_contrasts <- emmeans(visitrate_mod2, spec = pairwise ~ Genus, type = "response", offset = T)
 visitrate_contrasts     #  Apis is sig lower than Bombus, but not with Other. Bombus and Other not sig different
 visitrate_sig <- tibble::tribble(
@@ -311,18 +342,21 @@ visitrate_plot
 
 #### Total duration per visit
 
-# remove one outlier from the Other pollinators that has 2800+ seconds of visits to one flower (many combined species)
-visitation_bySpp_noDurOutlier <- filter(visitation_bySpp, dur < 2500)
-
 totvisitdur_mod1 <- glmmTMB(dur ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur_mod2 <- glmmTMB(dur ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
 AIC(totvisitdur_mod1, totvisitdur_mod2)  # negbinomial model has much lower AIC
 summary(totvisitdur_mod2)
 Anova(totvisitdur_mod2)
+# test of model diagnostics
 testDispersion(totvisitdur_mod2)
 testZeroInflation(totvisitdur_mod2)
-totvisitdur_simResid1 <- simulateResiduals(fittedModel = totvisitdur_mod2)
-plot(totvisitdur_simResid1)   # residual v predicted plot has some problems; quantile deviations detected
+
+# spatial autocorrelation test
+totvisitdur_resid <- simulateResiduals(totvisitdur_mod2)
+totvisitdur_resid2 <- recalculateResiduals(totvisitdur_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totvisitdur_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 totvisitdur_contrasts <- emmeans(totvisitdur_mod2, spec = pairwise ~ Genus, type = "response", offset = T)
 totvisitdur_contrasts    # No sig dif based on genus
 totvisitdur_sig <- tibble::tribble(
@@ -354,15 +388,21 @@ totvisitdur_plot
 
 #### Total duration per visit on petals per 30 min
 
-totvisitdur2_mod1 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
+#totvisitdur2_mod1 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur2_mod2 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
 AIC(totvisitdur2_mod2)  # poisson model doesn't converge, but the negbinomial model does
 summary(totvisitdur2_mod2)
 Anova(totvisitdur2_mod2)
+# tests of model diagnostics
 testDispersion(totvisitdur2_mod2)
 testZeroInflation(totvisitdur2_mod2)
-totvisitdur2_simResid1 <- simulateResiduals(fittedModel = totvisitdur2_mod2)
-plot(totvisitdur2_simResid1)  # residual v predicted plot has some problems
+
+# spatial autocorrelation test
+totvisitdur2_resid <- simulateResiduals(totvisitdur2_mod2)
+totvisitdur2_resid2 <- recalculateResiduals(totvisitdur2_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totvisitdur2_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 totvisitdur2_contrasts <- emmeans(totvisitdur2_mod2, spec = pairwise ~ Genus, type = "response", offset = T)
 totvisitdur2_contrasts     # Bombus is sig lower than Apis or Other, Apis and Other not sig different
 totvisitdur2_sig <- tibble::tribble(
@@ -391,6 +431,55 @@ totvisitdur2_plot <- ggplot(me_totvisitdur2, aes(x = x, y= predicted)) +
 totvisitdur2_plot
 
 
+
+#### Total duration per visit on pollen per 30 min
+
+totvisitdur4_mod1 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
+totvisitdur4_mod2 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
+AIC(totvisitdur4_mod1, totvisitdur4_mod2)
+summary(totvisitdur4_mod2)
+Anova(totvisitdur4_mod2)
+# test model diagnostics
+testDispersion(totvisitdur4_mod2)
+testZeroInflation(totvisitdur4_mod2)
+
+# spatial autocorrelation test
+totvisitdur4_resid <- simulateResiduals(totvisitdur4_mod2)
+totvisitdur4_resid2 <- recalculateResiduals(totvisitdur4_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totvisitdur4_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
+totvisitdur4_contrasts <- emmeans(totvisitdur4_mod2, spec = pairwise ~ Genus, type = "response", offset  = T)
+totvisitdur4_contrasts    
+totvisitdur4_sig <- tibble::tribble(
+  ~group1, ~group2, ~p.adj, ~p.adj.signif,
+  "APIS",     "BOMB", 0.89, "NS",
+  "APIS",     "Other", 0.0025, "**",
+  "BOMB",     "Other", 0.0001, "***")
+me_totvisitdur4 <- ggpredict(totvisitdur4_mod2, "Genus")
+plot(me_totvisitdur4, add.data = T) +   # need to add in duration per visit to pollen raw data points instead of total dur data points
+  scale_y_log10()
+
+# Total duration per visit on pollen by genus figure
+totvisitdur4_plot <- ggplot(me_totvisitdur4, aes(x = x, y= predicted)) +
+  geom_jitter(data = visitation_bySpp, aes(x= Genus, y = visitdur4, color = Genus), alpha = 0.6, width = 0.2, size = 1.8) +
+  geom_point(size = 2.5) +
+  #annotate(geom = "text", x = 1.8, y = 300, label = bquote(paste("Species, ", chi^2, " = 3.6, p = NS")), size = 2.5) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.05) +
+  scale_color_manual(values = Tol_muted3, name = "Species", labels = c("Honeybees", "Bumblebees", "Other Pollinators")) +
+  scale_y_log10() +
+  scale_x_discrete(labels = c("Honeybees", "Bumblebees", "Other")) +
+  stat_pvalue_manual(totvisitdur4_sig, y.position = 1.5, step.increase = 0.1, label = "p.adj.signif", hide.ns = T, label.size = 2.5) +
+  labs(color = "Species", x = "Species", y = "Duration on Pollen per Visit (seconds/visit)") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=7, color = "black"), axis.text.y = element_text(size=8, color = "black"), axis.title = element_text(size=9, color="black"),
+        legend.text = element_text(size = 8), legend.title = element_text(size = 9))
+totvisitdur4_plot
+ggsave(here("figures/FigS1.tiff"), plot = totvisitdur4_plot, dpi = 600, width = 4, height = 3.5, units = "in", compression="lzw")
+
+
+
+
 #### Total duration per visit on pollen+nectar per 30 min
 
 totvisitdur5_mod1 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
@@ -398,10 +487,16 @@ totvisitdur5_mod2 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula =
 AIC(totvisitdur5_mod1, totvisitdur5_mod2)
 summary(totvisitdur5_mod2)
 Anova(totvisitdur5_mod2)
+# tests of model diagnostics
 testDispersion(totvisitdur5_mod2)
 testZeroInflation(totvisitdur5_mod2)
-totvisitdur5_simResid1 <- simulateResiduals(fittedModel = totvisitdur5_mod2)
-plot(totvisitdur5_simResid1)  # residual v predicted plot has some problems; quantile deviations detected
+
+# spatial autocorrelation test
+totvisitdur5_resid <- simulateResiduals(totvisitdur5_mod2)
+totvisitdur5_resid2 <- recalculateResiduals(totvisitdur5_resid, group = visitation_bySpp$Site) # group residuals by site
+testSpatialAutocorrelation(totvisitdur5_resid2, unique(visitation_bySpp$Long), unique(visitation_bySpp$Lat)) # not sig!
+
+# post hoc tests
 totvisitdur5_contrasts <- emmeans(totvisitdur5_mod2, spec = pairwise ~ Genus, type = "response", offset  = T)
 totvisitdur5_contrasts    # No sig differences between genus
 totvisitdur5_sig <- tibble::tribble(
@@ -431,12 +526,26 @@ totvisitdur5_plot
 
 
 
+
+#############################
+# Figure 1 of all visitation behaviors by genus
+############################
+
+# Grid of both Apis visit number and duration plots
+visitation_fig1 <- grid_arrange_shared_legend(visitnum_plot, totvisitdur_plot, totvisitdur2_plot, totvisitdur5_plot, nrow=2, ncol = 2, position = "right")
+ggsave(here("figures/Fig1.tiff"), plot = visitation_fig1, dpi = 600, width = 6, height = 6, units = "in", compression="lzw")
+
+
+
+
+
+
 #############################
 # Combined figure of all visitation behaviors by genus
 ############################
 
 # Grid of both Apis visit number and duration plots
-visitation_fig <- grid_arrange_shared_legend(visitnum_plot, totvisitdur_plot, totvisitdur2_plot, totvisitdur5_plot, visitrate_plot, totdur_plot, totdur2_plot, totdur5_plot, nrow=2, ncol = 4, position = "right")
-ggsave(here("figures/Fig6.tiff"), plot = visitation_fig, dpi = 600, width = 11, height = 7, units = "in", compression="lzw")
+visitation_all_fig <- grid_arrange_shared_legend(visitnum_plot, totvisitdur_plot, totvisitdur2_plot, totvisitdur5_plot, visitrate_plot, totdur_plot, totdur2_plot, totdur5_plot, nrow=2, ncol = 4, position = "right")
+ggsave(here("figures/All visitation models.tiff"), plot = visitation_all_fig, dpi = 600, width = 11, height = 7, units = "in", compression="lzw")
 
 
