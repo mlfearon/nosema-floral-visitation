@@ -37,17 +37,8 @@ nosema
 
 # check for any samples that did not produce an 18S band
 No18S <- filter(nosema, X18S == 0 | is.na(X18S))
-   #found 13 examples, correspond to missing data
-check18S <- filter(nosema, is.na(X18S)) #all are n/a
-check18S2 <- filter(nosema, X18S == 0)
+   #None, all samples have a good 18S band
 
-#filter nosema dataset to only include samples with 18S data
-nosema <- filter(nosema, X18S == 1)
-
-
-
-# this site does not have any Bombus samples, so it was removed from the analysis
-nosema <- filter(nosema, Site != "SP")
 
 unique(nosema$Site)
 
