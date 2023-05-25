@@ -1,19 +1,14 @@
 # Calculations and data processing of Vairimorpha (=Nosema) ceranae prevalence in Apis and Bombus
 # and pollinator visitation behavior to flowers
 
-# This script produces the full compiled data for "Honeybee visitation behavior on shared floral resources 
+# This script produces the full compiled data for "Honeybee visitation behavior on shared flowers 
 # increases Vairimorpha ceranae prevalence in bumblebees". The resulting data set is analyzed using the code
-# titled NosemaAnalysis_10.28.2022.R
+# titled NosemaAnalysis_Apr.2023.R and VisitationAnalysis_Apr.2023.R
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 27 April 2023
+# Last updated: 25 May 2023
 
-
-
-
-# set the working directory
-setwd("C:/Users/Maryellen/Documents/School/Honors Thesis/Manuscript/Analysis")
 
 
 # Import libraries needed 
@@ -62,7 +57,7 @@ visitation <- read.csv("data/Video_Summary_2016_forNosemaAnalysis.csv", stringsA
 summary(visitation)
 
 
-# calculate proportion of apis visits, prop bombus visits, total non-apis or bombus visits, and duration of time per visit doing each behavior
+# calculate frequency of apis visits, frequency of bombus visits, total non-apis and non-bombus visits, and duration of time per visit doing each behavior
 visitation <- visitation %>%
   select(FlowerID, Site, Year, Visit, Date, StartHour, totdur_min:Other_dur, APIS_dur2:Other_dur5) %>%
   mutate(APIS_freq = if_else(VisitNum == 0, 0, APIS_visits/VisitNum), BOMB_freq = if_else(VisitNum == 0, 0, BOMB_visits/VisitNum),
@@ -252,8 +247,9 @@ View(avgs_bySpp)
 #write.csv(avgs_bySpp, "data/VisitationAvgs_bySpp.csv", quote = F)
 
  
+
 ######
-# Figures of Apis vs Bombus visitation metrics 
+# Figures of Apis vs Bombus visitation metrics (exploration, not shown in manuscript)
 #####
 
 plot <- ggplot(visitation, aes(x = BOMB_visits, y = APIS_visits)) +
