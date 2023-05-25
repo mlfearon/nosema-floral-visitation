@@ -1,5 +1,5 @@
-Metadata for Zbrozek, Fearon, Weise, and Tibbetts. 2023. Honeybee visitation to shared floral resources increases 
-Vairimorpha ceranae prevalence in bumblebees. Ecology and Evolution.
+Metadata for Zbrozek, Fearon, Weise, and Tibbetts. 2023. Honeybee visitation to shared flowers increases 
+Vairimorpha ceranae prevalence in bumblebees. Submitted to Ecology and Evolution.
 
 Data collected by: Michelle L. Fearon and Maryellen Zbrozek
 Code written by: Michelle L. Fearon and Maryellen Zbrozek
@@ -40,7 +40,7 @@ Visit		Visit number to the site, each site was visited twice for this study. The
 Site_Visit	Concatenated site code and visit number
 Lat		Latitude coordinate for the Site
 Long		Longitude coordinate for the Site
-Date_Collected	Date the sample was collected.
+Date_Collected	Date the sample was collected (MM/DD/YYYY).
 Type		Either “APIS” to indicate a managed, Apis mellifera sample, or “NON” to indicate a native bee and non-Apis sample.
 Family		Bee family. All were from Apidae.
 Genus		Genus name of bee sample. Either Apis or Bombus.
@@ -52,9 +52,9 @@ Code		Species identity code (code determined by the first two letters of the gen
 		BOBI = Bombus bimaculatus
 		BOPE = Bombus pensylvanicus
 Sex		Sex of the bee sampled (all samples were female).
-Date_ID		Date that sample was identified to species.
+Date_ID		Date that sample was identified to species (MM/DD/YYYY).
 ID_Initials	Initials of the person that did the identification. MZ = Maryellen Zbrozek
-Dissection_Date	Date that sample was dissected.
+Dissection_Date	Date that sample was dissected (MM/DD/YYYY).
 Dissect_InitialsInitials of the person that did the dissection. MZ = Maryellen Zbrozek
 Notes		Additional notes and observations about the sample.
 
@@ -75,7 +75,7 @@ Site			Unique site code for each of the 6 sites (see Appendix S1: Table S1 for s
 Year			Year of sample collection, all from 2016
 Site_Year		Concatenated Site and Year.
 Visit			Visit number to the site, each site was visited twice for this study. The first and second visit are indicated by “1” and “2”, respectively.
-Date			Date that the video recording was conducted during the visit to that site.
+Date			Date that the video recording was conducted during the visit to that site (MM/DD/YYYY).
 Lat			Latitude coordinate for the Site
 Long			Longitude coordinate for the Site
 StartHour		The hour that the video recording started.
@@ -158,7 +158,7 @@ Visit			Visit number to the site, each site was visited twice for this study. Th
 Site_Visit		Concatenated site code and visit number
 Lat			Latitude coordinate for the Site
 Long			Longitude coordinate for the Site
-Date_Collected		Date the sample was collected.
+Date_Collected		Date the sample was collected (MM/DD/YYYY).
 Type			Either “APIS” to indicate a managed, Apis mellifera sample, or “NON” to indicate a native bee and non-Apis sample.
 Family			Bee family. All were from Apidae.
 Genus			Genus name of bee sample. Either Apis or Bombus.
@@ -226,7 +226,7 @@ FlowerID	Unique ID of each flower in the study.
 Site		Unique site code for each of the 6 sites (see Appendix S1: Table S1 for site names, dates visited, location, etc).
 Year		Year of sample collection, all from 2016
 Visit		Visit number to the site, each site was visited twice for this study. The first and second visit are indicated by “1” and “2”, respectively.
-Date		Date that the video recording was conducted during the visit to that site.
+Date		Date that the video recording was conducted during the visit to that site (MM/DD/YYYY).
 StartHour	The hour that the video recording started.
 totdur_min	Total duration of the video recording in minutes (continuous)
 totdur_sec	Total duration of the video recording in seconds (continuous)
@@ -246,5 +246,5 @@ visitdur2	The duration per visit (seconds per visit) of honeybee, bumblebee, or 
 visitdur3	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were only interacting with the nectar of the flower.
 visitdur4	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were only interacting with the pollen/stamen of the flower.
 visitdur5	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were interacting with the pollen/stamen and nectar simultaneously of the flower.
-Lat			Latitude coordinate for the Site
-Long			Longitude coordinate for the Site
+Lat		Latitude coordinate for the Site
+Long		Longitude coordinate for the Site
