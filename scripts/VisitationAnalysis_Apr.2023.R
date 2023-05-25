@@ -1,4 +1,4 @@
-# Code for the analyses for "Honeybee visitation behavior on shared floral resources 
+# Code for the analyses for "Honeybee visitation behavior on shared flowers
 # increases Vairimorpha ceranae prevalence in bumblebees"
 
 # Manuscript submitted to: Ecology and Evolution
@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon
-# Last updated: 27 April 2023
+# Last updated: 25 May 2023
 
 
 # Import libraries needed 
@@ -91,7 +91,7 @@ grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, 
 # For each type of visitation metric, compare whether we get the same results from the per flower (as collected) and averaged per site/visit and per site
 ##############################
 
-#### Visit number per 30 min
+#### Visit number per 30 min [INCLUDED IN THE MANUSCRIPT]
 
 # remove one outlier from the Other pollinators that has 136 visits to one flower (many combined species)
 visitation_bySpp_noVisitNumOutlier <- filter(visitation_bySpp, visits < 100)
@@ -99,11 +99,11 @@ visitation_bySpp_noVisitNumOutlier <- filter(visitation_bySpp, visits < 100)
 range(visitation_bySpp_noVisitNumOutlier$visits)
 range(visitation_bySpp$visits)
 visitnum_mod1 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = poisson, data = visitation_bySpp_noVisitNumOutlier)
-visitnum_mod2 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = nbinom2(), data = visitation_bySpp_noVisitNumOutlier)
+visitnum_mod2 <- glmmTMB(visits ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = nbinom2(), data = visitation_bySpp_noVisitNumOutlier)  # use this model
 AIC(visitnum_mod1, visitnum_mod2)  # negbinomial model has much lower AIC
 summary(visitnum_mod2)
 Anova(visitnum_mod2)
-?Anova
+
 # tests of model assumptions and diagnostics
 testDispersion(visitnum_mod2)
 testZeroInflation(visitnum_mod2)
@@ -150,7 +150,8 @@ visitnum_mod <- glmmTMB(visits ~ Genus + (1|Site/Visit), family = nbinom2(), dat
 summary(visitnum_mod2)
 
 
-#### Total sum duration per 30 min
+#### Total sum duration per 30 min [NOT IN MANUSCRIPT]
+        # Note: We ended up using duration per visit instead of the total sum duration per 30 min in the manuscript (duration per visit models are below starting at line 344)
 
 # remove one outlier from the Other pollinators that has 2800+ seconds of visits to one flower (many combined species)
 visitation_bySpp_noDurOutlier <- filter(visitation_bySpp, dur < 2500)
@@ -198,7 +199,7 @@ totdur_plot <- ggplot(me_totdur, aes(x = x, y= predicted)) +
 totdur_plot
 
 
-#### Total sum duration on petals per 30 min
+#### Total sum duration on petals per 30 min [NOT IN MANUSCRIPT]
 
 totdur2_mod1 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = poisson, data = visitation_bySpp)
 totdur2_mod2 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = nbinom2(), data = visitation_bySpp)
@@ -243,7 +244,7 @@ totdur2_plot <- ggplot(me_totdur2, aes(x = x, y= predicted)) +
 totdur2_plot
 
 
-#### Total sum duration on pollen+nectar per 30 min
+#### Total sum duration on pollen+nectar per 30 min [NOT IN MANUSCRIPT]
 
 totdur5_mod1 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = poisson, data = visitation_bySpp)
 totdur5_mod2 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, family = nbinom2(), data = visitation_bySpp)
@@ -290,7 +291,7 @@ totdur5_plot
 
 
 
-#### Visit rate (visit per min)
+#### Visit rate (visit per min) [NOT IN MANUSCRIPT]
 
 # remove one outlier from the Other pollinators that has 136 visits to one flower (many combined species)
 visitation_bySpp_noVisitNumOutlier <- filter(visitation_bySpp, visits < 100)
@@ -340,7 +341,7 @@ visitrate_plot
 
 
 
-#### Total duration per visit
+#### Total duration per visit [INCLUDED IN THE MANUSCRIPT]
 
 totvisitdur_mod1 <- glmmTMB(dur ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur_mod2 <- glmmTMB(dur ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
@@ -386,7 +387,7 @@ totvisitdur_plot <- ggplot(me_totvisitdur, aes(x = x, y= predicted)) +
 totvisitdur_plot
 
 
-#### Total duration per visit on petals per 30 min
+#### Total duration per visit on petals per 30 min [INCLUDED IN THE MANUSCRIPT]
 
 #totvisitdur2_mod1 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur2_mod2 <- glmmTMB(dur2 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
@@ -432,7 +433,7 @@ totvisitdur2_plot
 
 
 
-#### Total duration per visit on pollen per 30 min
+#### Total duration per visit on pollen per 30 min [INCLUDED IN THE MANUSCRIPT]
 
 totvisitdur4_mod1 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur4_mod2 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
@@ -480,7 +481,7 @@ ggsave(here("figures/FigS1.tiff"), plot = totvisitdur4_plot, dpi = 600, width = 
 
 
 
-#### Total duration per visit on pollen+nectar per 30 min
+#### Total duration per visit on pollen+nectar per 30 min [INCLUDED IN THE MANUSCRIPT]
 
 totvisitdur5_mod1 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur5_mod2 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
