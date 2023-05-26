@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 25 May 2023
+# Last updated: 26 May 2023
 
 
 
@@ -193,7 +193,7 @@ site_prev$Nosema_Lower <- as.numeric(site_prev$Nosema_Lower)
 site_prev$Nosema_Upper <- as.numeric(site_prev$Nosema_Upper)
 
 
-write.csv(site_prev, file = "tables/AppendixTableS10_Nosema_Predicted_Prevalence_By_Host_and_Site.csv", quote = F)
+write.csv(site_prev, file = "tables/AppendixTableS9_Nosema_Predicted_Prevalence_By_Host_and_Site.csv", quote = F)
 
 
 
@@ -325,7 +325,7 @@ data_Apis$Other_dur5_z <- as.numeric(scale(log(data_Apis$Other_dur5+1)))
 
 
 
-# Model of visit number for Nosema in Apis
+# Model of visit number for Nosema in Apis  [INCLUDED IN MANSUCRIPT]
 fit_Apis_visits <- glmer(Nosema ~ APIS_visits_z + BOMB_visits_z + Other_visits_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 #fit_Apis_visits <- glmer(Nosema ~ APIS_visits_z + BOMB_visits_z + Other_visits_z + Visit + (1|Site), family = binomial, data = data_Apis)
 summary(fit_Apis_visits)
@@ -399,7 +399,7 @@ overdisp_fun(fit_Apis_freq)
 
 
 
-# Model of visit duration (i.e. behavior duration per each bee visit) for Nosema in Apis
+# Model of visit duration (i.e. behavior duration per each bee visit) for Nosema in Apis [INCLUDED IN MANSUCRIPT]
 fit_Apis_visitdur <- glmer(Nosema ~ APIS_visitdur_z + BOMB_visitdur_z + Other_visitdur_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 summary(fit_Apis_visitdur)
 vif(fit_Apis_visitdur)
@@ -408,25 +408,25 @@ qqnorm(resid(fit_Apis_visitdur))
 qqline(resid(fit_Apis_visitdur))
 overdisp_fun(fit_Apis_visitdur)
 
-# visit duration to petals
+# visit duration to petals [INCLUDED IN MANSUCRIPT]
 fit_Apis_visitdur2 <- glmer(Nosema ~ APIS_visitdur2_z + BOMB_visitdur2_z + Other_visitdur2_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 summary(fit_Apis_visitdur2)
 vif(fit_Apis_visitdur2)
 overdisp_fun(fit_Apis_visitdur2)
 
-# visit duration to nectar
+# visit duration to nectar [INCLUDED IN MANSUCRIPT, APPENDIX ONLY]
 fit_Apis_visitdur3 <- glmer(Nosema ~ APIS_visitdur3_z + BOMB_visitdur3_z + Other_visitdur3_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 summary(fit_Apis_visitdur3)
 vif(fit_Apis_visitdur3)
 overdisp_fun(fit_Apis_visitdur3)
 
-# visit duration to pollen
+# visit duration to pollen [INCLUDED IN MANSUCRIPT]
 fit_Apis_visitdur4 <- glmer(Nosema ~ APIS_visitdur4_z + BOMB_visitdur4_z + Other_visitdur4_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 summary(fit_Apis_visitdur4)
 vif(fit_Apis_visitdur4)
 overdisp_fun(fit_Apis_visitdur4)
 
-# visit duration to pollen+nectar
+# visit duration to pollen+nectar [INCLUDED IN MANSUCRIPT]
 fit_Apis_visitdur5 <- glmer(Nosema ~ APIS_visitdur5_z + BOMB_visitdur5_z + Other_visitdur5_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
 summary(fit_Apis_visitdur5)
 vif(fit_Apis_visitdur5)
@@ -563,7 +563,7 @@ cor(data_Bombus$VisitRichnessPerFlower, data_Bombus$Other_visits)
 cor(data_Bombus$APIS_visits, data_Bombus$BOMB_visits)
 
 
-# Model of visit number for Nosema in Bombus 
+# Model of visit number for Nosema in Bombus  [INCLUDED IN MANUSCRIPT]
 fit_Bombus_visits <- glmer(Nosema ~ APIS_visits_z + BOMB_visits_z + Other_visits_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 vif(fit_Bombus_visits)
 summary(fit_Bombus_visits)
@@ -594,7 +594,7 @@ qqline(resid(fit_Bombus_freq))
 overdisp_fun(fit_Bombus_freq)
 
 
-# Model of visit duration (i.e. behavior duration per each bee visit) for Nosema in Bombus
+# Model of visit duration (i.e. behavior duration per each bee visit) for Nosema in Bombus  [INCLUDED IN MANUSCRIPT]
 fit_Bombus_visitdur <- glmer(Nosema ~ APIS_visitdur_z + BOMB_visitdur_z + Other_visitdur_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_visitdur)
 vif(fit_Bombus_visitdur)
@@ -604,25 +604,25 @@ qqline(resid(fit_Bombus_visitdur))
 overdisp_fun(fit_Bombus_visitdur)
 
 
-# visit duration to petals
+# visit duration to petals  [INCLUDED IN MANUSCRIPT]
 fit_Bombus_visitdur2 <- glmer(Nosema ~ APIS_visitdur2_z + BOMB_visitdur2_z + Other_visitdur2_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_visitdur2)
 vif(fit_Bombus_visitdur2)
 overdisp_fun(fit_Bombus_visitdur2)
 
-# visit duration to nectar
+# visit duration to nectar  [INCLUDED IN MANUSCRIPT, APPENDIX ONLY]
 fit_Bombus_visitdur3 <- glmer(Nosema ~ APIS_visitdur3_z + BOMB_visitdur3_z + Other_visitdur3_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_visitdur3)
 vif(fit_Bombus_visitdur3)
 overdisp_fun(fit_Bombus_visitdur3)
 
-# visit duration to pollen
+# visit duration to pollen  [INCLUDED IN MANUSCRIPT]
 fit_Bombus_visitdur4 <- glmer(Nosema ~ APIS_visitdur4_z + BOMB_visitdur4_z + Other_visitdur4_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_visitdur4)
 vif(fit_Bombus_visitdur4)
 overdisp_fun(fit_Bombus_visitdur4)
 
-# visit duration to pollen+nectar
+# visit duration to pollen+nectar  [INCLUDED IN MANUSCRIPT]
 fit_Bombus_visitdur5 <- glmer(Nosema ~ APIS_visitdur5_z + BOMB_visitdur5_z + Other_visitdur5_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_visitdur5)
 vif(fit_Bombus_visitdur5)
@@ -1374,10 +1374,10 @@ print(prev_BombusDur2)
 
 # Grid of both Apis and bombus duration on PETALS
 prev_figS4 <- grid_arrange_shared_legend(prev_ApisDur2, prev_BombusDur2, nrow=1, ncol = 2, position = "right")
-ggsave("figures/FigS4.tiff", plot = prev_figS4, dpi = 600, width = 6.5, height = 3, units = "in", compression="lzw")
+ggsave("figures/VisitDurPetalsFig.tiff", plot = prev_figS4, dpi = 600, width = 6.5, height = 3, units = "in", compression="lzw")
 
 # color blind check
-cvdPlot(prev_figS2)
+cvdPlot(prev_figS4)
 
 
 
@@ -1580,7 +1580,7 @@ print(prev_ApisSumDur_PN)
 ###############################
 # Grid of both isit rate and sum duration plots
 prev_fig5 <- grid_arrange_shared_legend(prev_ApisRate, prev_ApisSumDur, prev_BombusSumDur2, prev_ApisSumDur_PN, nrow=1, ncol = 4, position = "right")
-ggsave(here("figures/Fig5.tiff"), plot = prev_fig5, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
+ggsave(here("figures/VisitRate_SumDurationFig.tiff"), plot = prev_fig5, dpi = 600, width = 10, height = 3.5, units = "in", compression="lzw")
 
 # color blind check
 cvdPlot(prev_fig4)

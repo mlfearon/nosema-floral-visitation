@@ -7,7 +7,7 @@
 
 
 # Written by: Michelle Fearon and Maryellen Zbrozek
-# Last updated: 25 May 2023
+# Last updated: 26 May 2023
 
 
 
@@ -32,6 +32,7 @@ nosema
 
 # check for any samples that did not produce an 18S band
 No18S <- filter(nosema, X18S == 0 | is.na(X18S))
+No18S
    #None, all samples have a good 18S band
 
 

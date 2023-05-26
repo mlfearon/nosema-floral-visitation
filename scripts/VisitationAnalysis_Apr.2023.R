@@ -11,7 +11,7 @@
 
 
 # Written by: Michelle Fearon
-# Last updated: 25 May 2023
+# Last updated: 26 May 2023
 
 
 # Import libraries needed 
@@ -19,6 +19,7 @@
 library(lme4)
 library(lmerTest)
 library(glmmTMB)
+library(car)
 library(emmeans)
 library(DHARMa)
 library(EnvStats)
@@ -437,12 +438,12 @@ totvisitdur2_plot
 
 totvisitdur4_mod1 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur4_mod2 <- glmmTMB(dur4 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
-AIC(totvisitdur4_mod1, totvisitdur4_mod2)
+AIC(totvisitdur4_mod1, totvisitdur4_mod2) # neg binom model is better
 summary(totvisitdur4_mod2)
 Anova(totvisitdur4_mod2)
 # test model diagnostics
 testDispersion(totvisitdur4_mod2)
-testZeroInflation(totvisitdur4_mod2)
+testZeroInflation(totvisitdur4_mod2)  # slightly zero inflated, but the model is controlling for that with the hurtdle model
 
 # spatial autocorrelation test
 totvisitdur4_resid <- simulateResiduals(totvisitdur4_mod2)
@@ -485,7 +486,7 @@ ggsave(here("figures/FigS1.tiff"), plot = totvisitdur4_plot, dpi = 600, width = 
 
 totvisitdur5_mod1 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = poisson, data = visitation_bySpp)
 totvisitdur5_mod2 <- glmmTMB(dur5 ~ Genus + (1|Site/Visit/FlowerID), ziformula = ~1 + Genus, offset = log(visits+1), family = nbinom2(), data = visitation_bySpp)
-AIC(totvisitdur5_mod1, totvisitdur5_mod2)
+AIC(totvisitdur5_mod1, totvisitdur5_mod2)  # neg binom model is better
 summary(totvisitdur5_mod2)
 Anova(totvisitdur5_mod2)
 # tests of model diagnostics
