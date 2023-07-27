@@ -16,7 +16,7 @@ Definitions:
 Nosema or Nosema ceranae is the previous name for Vairimorpha ceranae. The data and code typically use "Nosema", while in the manuscript we updated to the current taxonomic name.
 Data/Code uses "Apis" to refer to honeybees.
 Data/Code uses "Bombus" or Bomb to refer to bumblebees.
-Data/Code uses "Other" to refer to all other pollinators as a group.
+Data/Code uses "Other" to refer to all other pollinators as a group. Other1 includes all pollinators except for Apis and Bombus; Other2 includes all pollinators except for Apis, Bombus, and Eucera squash bees.
 
 File name:
 Nosema_pos.csv
@@ -30,7 +30,7 @@ Fearon and Tibbetts (2021) and Fearon et al. (2022), but focuses on different pa
 
 Headings:
 Sample		Unique sample number for each individual in the study. These sample numbers match those found in PollinatorComm2015_2016_publish.csv
-18S		Binary for the presence (1) or absence (0) of the 18S PCR band. NA indicates samples were not run or were contaminated.
+18S			Binary for the presence (1) or absence (0) of the 18S PCR band. NA indicates samples were not run or were contaminated.
 Nosema		Binary for the presence (1) or absence (0) of Vairimorpha (=Nosema) ceranae in the sample based on PCR.
 Transect.ID	Unique transect ID that indicates the site, year of collection, transect A B C or D, visit number to the site, and net or pan trap collected.  All individuals collected from the same transect share a transect ID. These unique IDs match those found in PollinatorComm2015_2016_publish.csv
 Individual.ID 	Includes the transect ID with a sequential number for each sample. These unique IDs match those found in PollinatorComm2015_2016_publish.csv
@@ -38,7 +38,7 @@ Year 		Year of sample collection, all from 2016
 Site		Unique site code for each of the 6 sites (see Appendix S1: Table S1 for site names, dates visited, location, etc).
 Visit		Visit number to the site, each site was visited twice for this study. The first and second visit are indicated by “1” and “2”, respectively.
 Site_Visit	Concatenated site code and visit number
-Lat		Latitude coordinate for the Site
+Lat			Latitude coordinate for the Site
 Long		Longitude coordinate for the Site
 Date_Collected	Date the sample was collected (MM/DD/YYYY).
 Type		Either “APIS” to indicate a managed, Apis mellifera sample, or “NON” to indicate a native bee and non-Apis sample.
@@ -46,16 +46,16 @@ Family		Bee family. All were from Apidae.
 Genus		Genus name of bee sample. Either Apis or Bombus.
 Species		Species name of bee sample.
 Code		Species identity code (code determined by the first two letters of the genus and species names)
-		APME = Apis mellifera
-		BOIM = Bombus impatiens
-		BOFE = Bombus fervidus
-		BOBI = Bombus bimaculatus
-		BOPE = Bombus pensylvanicus
-Sex		Sex of the bee sampled (all samples were female).
+				APME = Apis mellifera
+				BOIM = Bombus impatiens
+				BOFE = Bombus fervidus
+				BOBI = Bombus bimaculatus
+				BOPE = Bombus pensylvanicus
+Sex			Sex of the bee sampled (all samples were female).
 Date_ID		Date that sample was identified to species (MM/DD/YYYY).
 ID_Initials	Initials of the person that did the identification. MZ = Maryellen Zbrozek
-Dissection_Date	Date that sample was dissected (MM/DD/YYYY).
-Dissect_InitialsInitials of the person that did the dissection. MZ = Maryellen Zbrozek
+Dissection_Date		Date that sample was dissected (MM/DD/YYYY).
+Dissect_Initials	Initials of the person that did the dissection. MZ = Maryellen Zbrozek
 Notes		Additional notes and observations about the sample.
 
 
@@ -76,7 +76,7 @@ Year			Year of sample collection, all from 2016
 Site_Year		Concatenated Site and Year.
 Visit			Visit number to the site, each site was visited twice for this study. The first and second visit are indicated by “1” and “2”, respectively.
 Date			Date that the video recording was conducted during the visit to that site (MM/DD/YYYY).
-Lat			Latitude coordinate for the Site
+Lat				Latitude coordinate for the Site
 Long			Longitude coordinate for the Site
 StartHour		The hour that the video recording started.
 TimeStart		The exact time that the video recording started (HH:MM format).
@@ -117,11 +117,14 @@ VESP_rate		The rate of Vespula wasp spp visits to a flower per minute (number of
 TRIE_rate		The rate of Triepeolus spp visits to a flower per minute (number of visits per min).
 APISBOMB_visits		The number of Apis mellifera (honeybee) + Bombus spp. (bumblebee) visits to a flower during the video recording duration (number of visits).
 Native_visits		The number of native bee (i.e. excluding honeybees) visits to a flower during the video recording duration (number of visits).
-Other_visits		The number of non-honeybee and non-bumblebee visits to a flower during the video recording duration (number of visits).
+Other1_visits		The number of non-honeybee and non-bumblebee visits to a flower during the video recording duration (number of visits).
+Other2_visits		The number of non-honeybee and non-bumblebee and non-squash bee visits to a flower during the video recording duration (number of visits).
 APIS_dur		The duration of all Apis mellifera (honeybee) visits to a flower (any part) in seconds.
 BOMB_dur		The duration of all Bombus spp. (bumblebee) visits to a flower (any part) in seconds.
+PEPO_dur		The duration of all Eucera pruinosa (squash bee) visits to a flower (any part) in seconds.
 Native_dur		The duration of all native bee (i.e. excluding honeybees) visits to a flower (any part) in seconds.
-Other_dur		The duration of all non-honeybee and non-bumblebee visits to a flower (any part) in seconds.
+Other1_dur		The duration of all non-honeybee and non-bumblebee visits to a flower (any part) in seconds.
+Other2_dur		The duration of all non-honeybee and non-bumblebee and non-squash bee visits to a flower (any part) in seconds.
 APIS_dur2		The duration (seconds) of all Apis mellifera (honeybees) that were only interacting with the petals of the flower.
 APIS_dur3		The duration (seconds) of all Apis mellifera (honeybees) that were only interacting with the nectar of the flower.
 APIS_dur4		The duration (seconds) of all Apis mellifera (honeybees) that were only interacting with the pollen/stamen of the flower.
@@ -130,10 +133,18 @@ BOMB_dur2		The duration (seconds) of all Bombus spp. (bumblebees) that were only
 BOMB_dur3		The duration (seconds) of all Bombus spp. (bumblebees) that were only interacting with the nectar of the flower.
 BOMB_dur4		The duration (seconds) of all Bombus spp. (bumblebees) that were only interacting with the pollen/stamen of the flower.
 BOMB_dur5		The duration (seconds) of all Bombus spp. (bumblebees) that were interacting with the pollen/stamen ad nectar simultaneously of the flower.
-Other_dur2		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower.
-Other_dur3		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower.
-Other_dur4		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower.
-Other_dur5		The duration (seconds) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower.
+PEPO_dur2		The duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the petals of the flower.
+PEPO_dur3		The duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the nectar of the flower.
+PEPO_dur4		The duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the pollen/stamen of the flower.
+PEPO_dur5		The duration (seconds) of all Eucera pruinosa (squash bee) that were interacting with the pollen/stamen ad nectar simultaneously of the flower.
+Other1_dur2		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower.
+Other1_dur3		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower.
+Other1_dur4		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower.
+Other1_dur5		The duration (seconds) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower.
+Other2_dur2		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the petals of the flower.
+Other2_dur3		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the nectar of the flower.
+Other2_dur4		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the pollen/stamen of the flower.
+Other2_dur5		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were interacting with the pollen/stamen and nectar simultaneously of the flower.
 
 
 
@@ -148,7 +159,7 @@ visit to each site.
 
 Headings:
 Sample			Unique sample number for each individual in the study. These sample numbers match those found in PollinatorComm2015_2016_publish.csv
-18S			Binary for the presence (1) or absence (0) of the 18S PCR band. NA indicates samples were not run or were contaminated.
+18S				Binary for the presence (1) or absence (0) of the 18S PCR band. NA indicates samples were not run or were contaminated. (May be labeled X18S due to the number in the header)
 Nosema			Binary for the presence (1) or absence (0) of Vairimorpha (=Nosema) ceranae in the sample based on PCR.
 Transect.ID		Unique transect ID that indicates the site, year of collection, transect A B C or D, visit number to the site, and net or pan trap collected.  All individuals collected from the same transect share a transect ID. These unique IDs match those found in PollinatorComm2015_2016_publish.csv
 Individual.ID 		Includes the transect ID with a sequential number for each sample. These unique IDs match those found in PollinatorComm2015_2016_publish.csv
@@ -156,7 +167,7 @@ Year 			Year of sample collection, all from 2016
 Site			Unique site code for each of the 6 sites (see Appendix S1: Table S1 for site names, dates visited, location, etc).
 Visit			Visit number to the site, each site was visited twice for this study. The first and second visit are indicated by “1” and “2”, respectively.
 Site_Visit		Concatenated site code and visit number
-Lat			Latitude coordinate for the Site
+Lat				Latitude coordinate for the Site
 Long			Longitude coordinate for the Site
 Date_Collected		Date the sample was collected (MM/DD/YYYY).
 Type			Either “APIS” to indicate a managed, Apis mellifera sample, or “NON” to indicate a native bee and non-Apis sample.
@@ -164,22 +175,26 @@ Family			Bee family. All were from Apidae.
 Genus			Genus name of bee sample. Either Apis or Bombus.
 Species			Species name of bee sample.
 Code			Species identity code (code determined by the first two letters of the genus and species names)
-			APME = Apis mellifera
-			BOIM = Bombus impatiens
-			BOFE = Bombus fervidus
-			BOBI = Bombus bimaculatus
-			BOPE = Bombus pensylvanicus
+					APME = Apis mellifera
+					BOIM = Bombus impatiens
+					BOFE = Bombus fervidus
+					BOBI = Bombus bimaculatus
+					BOPE = Bombus pensylvanicus
 Sex			Sex of the bee sampled (all samples were female).
 VisitDur		The average duration of all pollinator visits to a flower in seconds for each visit to each site
 VisitNum		The average number of all pollinator visits to a flower for each visit to each site.
 VisitRichnessPerFlower	The average number of different species (or morphospecies) that visited a single flower for each visit to each site
 APIS_visits		The average number of Apis mellifera (honeybee) visits to a flower during the video recording duration for each visit to each site (number of visits).
 BOMB_visits		The average number of Bombus spp. (bumblebee) visits to a flower during the video recording duration for each visit to each site (number of visits).
-Other_visits		The average number of non-honeybee and non-bumblebee visits to a flower during the video recording duration for each visit to each site (number of visits).
+PEPO_visits		The average number of Eucera pruinosa (squash bee) visits to a flower during the video recording duration for each visit to each site (number of visits).
+Other1_visits		The average number of non-honeybee and non-bumblebee visits to a flower during the video recording duration for each visit to each site (number of visits).
+Other2_visits		The average number of non-honeybee and non-bumblebee and non-squash bee visits to a flower during the video recording duration for each visit to each site (number of visits).
 Native_visits		The average number of native bee (i.e. excluding honeybees) visits to a flower during the video recording duration for each visit to each site (number of visits).
 APIS_rate		The average rate of Apis mellifera (honeybee) visits to a flower per minute for each visit to each site (number of visits per min).
 BOMB_rate		The average rate of Bombus spp. (bumblebee) visits to a flower per minute for each visit to each site (number of visits per min).
-Other_rate		The average rate of non-honeybee and non-bumblebee visits to a flower per minute for each visit to each site (number of visits per min).
+PEPO_rate		The average rate of Eucera pruinosa (squash bee) visits to a flower per minute for each visit to each site (number of visits per min).
+Other1_rate		The average rate of non-honeybee and non-bumblebee visits to a flower per minute for each visit to each site (number of visits per min).
+Other2_rate		The average rate of non-honeybee and non-bumblebee and non-squash bee visits to a flower per minute for each visit to each site (number of visits per min).
 APIS_dur		The average duration (seconds) of all Apis mellifera (honeybees) visits that were interacting with any part of the flower for each visit to each site.
 APIS_dur2		The average duration (seconds) of all Apis mellifera (honeybees) that were only interacting with the petals of the flower for each visit to each site.
 APIS_dur3		The average duration (seconds) of all Apis mellifera (honeybees) that were only interacting with the nectar of the flower for each visit to each site.
@@ -200,16 +215,36 @@ BOMB_visitdur2		The average duration per visit (seconds per visit) of all Bombus
 BOMB_visitdur3		The average duration per visit (seconds per visit) of all Bombus spp. (bumblebees) that were only interacting with the nectar of the flower for each visit to each site.
 BOMB_visitdur4		The average duration per visit (seconds per visit) of all Bombus spp. (bumblebees) that were only interacting with the pollen/stamen of the flower for each visit to each site.
 BOMB_visitdur5		The average duration per visit (seconds per visit) of all Bombus spp. (bumblebees) that were interacting with the pollen/stamen ad nectar simultaneously of the flower for each visit to each site.
-Other_dur		The average duration (seconds) of all non-honeybee and non-bumblebee visits that were interacting with any part of the flower for each visit to each site.
-Other_dur2		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower for each visit to each site.
-Other_dur3		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower for each visit to each site.
-Other_dur4		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower for each visit to each site.
-Other_dur5		The duration (seconds) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
-Other_visitdur		The average duration per visit (seconds per visit) of all non-honeybee and non-bumblebee visits that were interacting with any part of the flower for each visit to each site.
-Other_visitdur2		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower for each visit to each site.
-Other_visitdur3		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower for each visit to each site.
-Other_visitdur4		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower for each visit to each site.
-Other_visitdur5		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
+PEPO_dur		The average duration (seconds) of all Eucera pruinosa (squash bee) visits that were interacting with any part of the flower for each visit to each site.
+PEPO_dur2		The average duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the petals of the flower for each visit to each site.
+PEPO_dur3		The average duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the nectar of the flower for each visit to each site.
+PEPO_dur4		The average duration (seconds) of all Eucera pruinosa (squash bee) that were only interacting with the pollen/stamen of the flower for each visit to each site.
+PEPO_dur5		The average duration (seconds) of all Eucera pruinosa (squash bee) that were interacting with the pollen/stamen ad nectar simultaneously of the flower for each visit to each site.
+PEPO_visitdur		The average duration per visit (seconds per visit) of all Eucera pruinosa (squash bee) visits that were interacting with any part of the flower for each visit to each site.
+PEPO_visitdur2		The average duration per visit (seconds per visit) of all Eucera pruinosa (squash bee) that were only interacting with the petals of the flower for each visit to each site.
+PEPO_visitdur3		The average duration per visit (seconds per visit) of all Eucera pruinosa (squash bee) that were only interacting with the nectar of the flower for each visit to each site.
+PEPO_visitdur4		The average duration per visit (seconds per visit) of all Eucera pruinosa (squash bee) that were only interacting with the pollen/stamen of the flower for each visit to each site.
+PEPO_visitdur5		The average duration per visit (seconds per visit) of all Eucera pruinosa (squash bee) that were interacting with the pollen/stamen ad nectar simultaneously of the flower for each visit to each site.
+Other1_dur		The average duration (seconds) of all non-honeybee and non-bumblebee visits that were interacting with any part of the flower for each visit to each site.
+Other1_dur2		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower for each visit to each site.
+Other1_dur3		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower for each visit to each site.
+Other1_dur4		The duration (seconds) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower for each visit to each site.
+Other1_dur5		The duration (seconds) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
+Other1_visitdur		The average duration per visit (seconds per visit) of all non-honeybee and non-bumblebee visits that were interacting with any part of the flower for each visit to each site.
+Other1_visitdur2		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the petals of the flower for each visit to each site.
+Other1_visitdur3		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the nectar of the flower for each visit to each site.
+Other1_visitdur4		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were only interacting with the pollen/stamen of the flower for each visit to each site.
+Other1_visitdur5		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
+Other2_dur		The average duration (seconds) of all non-honeybee and non-bumblebee and non-squash bee visits that were interacting with any part of the flower for each visit to each site.
+Other2_dur2		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the petals of the flower for each visit to each site.
+Other2_dur3		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the nectar of the flower for each visit to each site.
+Other2_dur4		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the pollen/stamen of the flower for each visit to each site.
+Other2_dur5		The duration (seconds) of all non-honeybees and non-bumblebees and non-squash bee that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
+Other2_visitdur		The average duration per visit (seconds per visit) of all non-honeybee and non-bumblebee and non-squash bee visits that were interacting with any part of the flower for each visit to each site.
+Other2_visitdur2		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the petals of the flower for each visit to each site.
+Other2_visitdur3		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the nectar of the flower for each visit to each site.
+Other2_visitdur4		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees and non-squash bee that were only interacting with the pollen/stamen of the flower for each visit to each site.
+Other2_visitdur5		The average duration per visit (seconds per visit) of all non-honeybees and non-bumblebees and non-squash bee that were interacting with the pollen/stamen and nectar simultaneously of the flower for each visit to each site.
 VisitShannon		The Shannon diversity index of all pollinator visitors to flowers for each visit to a site.
 
 
@@ -231,20 +266,21 @@ StartHour	The hour that the video recording started.
 totdur_min	Total duration of the video recording in minutes (continuous)
 totdur_sec	Total duration of the video recording in seconds (continuous)
 Genus		Code to identify the three groups that we were testing for differences in visitation behavior
-		APME = Apis mellifera
-		BOMB = Bombus spp
-		Other = all other pollinators
-visits		The number of honeybee, bumblebee, or other pollinators visits to a flower during the video recording duration (number of visits per 30 min).
-rate		The rate of honeybee, bumblebee, or other pollinators visits to a flower per minute (number of visits per min).
-dur		The duration (seconds) of honeybee, bumblebee, or other pollinators visits to a flower (interacting with any part).
-dur2		The duration (seconds) of honeybee, bumblebee, or other pollinators that were only interacting with the petals of the flower.		
-dur3		The duration (seconds) of honeybee, bumblebee, or other pollinators that were only interacting with the nectar of the flower.
-dur4		The duration (seconds) of honeybee, bumblebee, or other pollinators that were only interacting with the pollen/stamen of the flower.
-dur5		The duration (seconds) of honeybee, bumblebee, or other pollinators that were interacting with the pollen/stamen and nectar simultaneously of the flower.
-visitdur	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators visits to a flower (interacting with any part).
-visitdur2	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were only interacting with the petals of the flower.
-visitdur3	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were only interacting with the nectar of the flower.
-visitdur4	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were only interacting with the pollen/stamen of the flower.
-visitdur5	The duration per visit (seconds per visit) of honeybee, bumblebee, or other pollinators that were interacting with the pollen/stamen and nectar simultaneously of the flower.
-Lat		Latitude coordinate for the Site
+				APME = Apis mellifera (hoenybees)
+				BOMB = Bombus spp (bumblebees)
+				PEPO = Eucera pruinosa (squash bees)
+				Other = all other pollinators (not including those above)
+visits		The number of honeybee, bumblebee, squash bee, or other pollinators visits to a flower during the video recording duration (number of visits per 30 min).
+rate		The rate of honeybee, bumblebee, squash bee, or other pollinators visits to a flower per minute (number of visits per min).
+dur			The duration (seconds) of honeybee, bumblebee, squash bee, or other pollinators visits to a flower (interacting with any part).
+dur2		The duration (seconds) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the petals of the flower.		
+dur3		The duration (seconds) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the nectar of the flower.
+dur4		The duration (seconds) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the pollen/stamen of the flower.
+dur5		The duration (seconds) of honeybee, bumblebee, squash bee, or other pollinators that were interacting with the pollen/stamen and nectar simultaneously of the flower.
+visitdur	The duration per visit (seconds per visit) of honeybee, bumblebee, squash bee, or other pollinators visits to a flower (interacting with any part).
+visitdur2	The duration per visit (seconds per visit) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the petals of the flower.
+visitdur3	The duration per visit (seconds per visit) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the nectar of the flower.
+visitdur4	The duration per visit (seconds per visit) of honeybee, bumblebee, squash bee, or other pollinators that were only interacting with the pollen/stamen of the flower.
+visitdur5	The duration per visit (seconds per visit) of honeybee, bumblebee, squash bee, or other pollinators that were interacting with the pollen/stamen and nectar simultaneously of the flower.
+Lat			Latitude coordinate for the Site
 Long		Longitude coordinate for the Site
