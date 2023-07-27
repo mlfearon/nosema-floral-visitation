@@ -84,9 +84,7 @@ summary(visitation)
 # calculate frequency of apis visits, frequency of bombus visits, total non-apis and non-bombus visits, and duration of time per visit doing each behavior
 visitation <- visitation %>%
   select(FlowerID, Site, Year, Visit, Date, StartHour, totdur_min:Other2_dur, APIS_dur2:Other2_dur5) %>%
-  mutate(APIS_freq = if_else(VisitNum == 0, 0, APIS_visits/VisitNum), BOMB_freq = if_else(VisitNum == 0, 0, BOMB_visits/VisitNum), PEPO_freq = if_else(VisitNum == 0, 0, PEPO_visits/VisitNum),
-         Native_freq = if_else(VisitNum == 0, 0, Native_visits/VisitNum), Other1_freq = if_else(VisitNum == 0, 0, Other1_visits/VisitNum), 
-         Other2_freq = if_else(VisitNum == 0, 0, Other2_visits/VisitNum), Other1_rate = Other1_visits/totdur_min, Other2_rate = Other2_visits/totdur_min,
+  mutate(Other1_rate = Other1_visits/totdur_min, Other2_rate = Other2_visits/totdur_min,
          APIS_visitdur = if_else(APIS_visits == 0, 0, APIS_dur/APIS_visits), APIS_visitdur2 = if_else(APIS_visits == 0, 0, APIS_dur2/APIS_visits),
          APIS_visitdur3 = if_else(APIS_visits == 0, 0, APIS_dur3/APIS_visits), APIS_visitdur4 = if_else(APIS_visits == 0, 0, APIS_dur4/APIS_visits),
          APIS_visitdur5 = if_else(APIS_visits == 0, 0, APIS_dur5/APIS_visits), BOMB_visitdur = if_else(BOMB_visits == 0, 0, BOMB_dur/BOMB_visits),
@@ -175,7 +173,6 @@ avgs <- visitation %>%
   group_by(Site, Visit) %>%
   summarize(VisitDur = mean(VisitDur), VisitNum = mean(VisitNum), VisitRichnessPerFlower = mean(VisitRichness),
             APIS_visits = mean(APIS_visits), BOMB_visits = mean(BOMB_visits), PEPO_visits = mean(PEPO_visits), Other1_visits = mean(Other1_visits), Other2_visits = mean(Other2_visits), Native_visits = mean(Native_visits),
-            APIS_freq = mean(APIS_freq), BOMB_freq = mean(BOMB_freq), PEPO_freq = mean(PEPO_freq), Other1_freq = mean(Other1_freq), Other2_freq = mean(Other2_freq), Native_freq = mean(Native_freq),
             APIS_rate = mean(APIS_rate), BOMB_rate = mean(BOMB_rate), PEPO_rate = mean(PEPO_rate), Other1_rate = mean(Other1_rate), Other2_rate = mean(Other2_rate),
             APIS_dur = mean(APIS_dur), APIS_dur2 = mean(APIS_dur2), APIS_dur3 = mean(APIS_dur3), APIS_dur4 = mean(APIS_dur4),
             APIS_dur5 = mean(APIS_dur5), APIS_visitdur = mean(APIS_visitdur), APIS_visitdur2 = mean(APIS_visitdur2), 
