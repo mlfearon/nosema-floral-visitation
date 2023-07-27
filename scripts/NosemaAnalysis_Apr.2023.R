@@ -297,15 +297,9 @@ data_Apis$VisitNum_z <- as.numeric(scale(log(data_Apis$VisitNum+1)))
 data_Apis$APIS_visits_z <- as.numeric(scale(log(data_Apis$APIS_visits+1)))
 data_Apis$BOMB_visits_z <- as.numeric(scale(log(data_Apis$BOMB_visits+1)))
 data_Apis$PEPO_visits_z <- as.numeric(scale(log(data_Apis$PEPO_visits+1)))
-data_Apis$APIS_freq_z <- as.numeric(scale(data_Apis$APIS_freq))
-data_Apis$BOMB_freq_z <- as.numeric(scale(data_Apis$BOMB_freq))
-data_Apis$PEPO_freq_z <- as.numeric(scale(data_Apis$PEPO_freq))
 data_Apis$Native_visits_z <- as.numeric(scale(log(data_Apis$Native_visits+1)))
 data_Apis$Other1_visits_z <- as.numeric(scale(log(data_Apis$Other1_visits+1)))
 data_Apis$Other2_visits_z <- as.numeric(scale(log(data_Apis$Other2_visits+1)))
-data_Apis$Native_freq_z <- as.numeric(scale(data_Apis$Native_freq))
-data_Apis$Other1_freq_z <- as.numeric(scale(data_Apis$Other1_freq))
-data_Apis$Other2_freq_z <- as.numeric(scale(data_Apis$Other2_freq))
 data_Apis$APIS_rate_z <- as.numeric(scale(log(data_Apis$APIS_rate+1)))
 data_Apis$BOMB_rate_z <- as.numeric(scale(log(data_Apis$BOMB_rate+1)))
 data_Apis$PEPO_rate_z <- as.numeric(scale(log(data_Apis$PEPO_rate+1)))
@@ -396,18 +390,6 @@ ApisRate_simResid <- simulateResiduals(fittedModel = fit_Apis_rate)
 plot(ApisRate_simResid) 
 plot(fit_Apis_rate_resid2)
 
-
-
-# Model of visit frequency for Nosema in Apis  (not shown in manuscript)
-fit_Apis_freq <- glmer(Nosema ~ APIS_freq_z + BOMB_freq_z + Other1_freq_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
-fit_Apis_freq <- glmer(Nosema ~ APIS_freq_z + BOMB_freq_z + PEPO_freq_z + Other2_freq_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Apis)
-summary(fit_Apis_freq)
-vif(fit_Apis_freq)
-vif.mer(fit_Apis_freq) # multi-collinearity
-plot(fit_Apis_freq)
-qqnorm(resid(fit_Apis_freq))
-qqline(resid(fit_Apis_freq))
-overdisp_fun(fit_Apis_freq)
 
 
 # Model of visit duration (i.e. behavior duration per each bee visit) for Nosema in Apis [INCLUDED IN MANSUCRIPT]
@@ -541,12 +523,6 @@ data_Bombus$PEPO_visits_z <- as.numeric(scale(log(data_Bombus$PEPO_visits+1)))
 data_Bombus$Native_visits_z <- as.numeric(scale(log(data_Bombus$Native_visits+1)))
 data_Bombus$Other1_visits_z <- as.numeric(scale(log(data_Bombus$Other1_visits+1)))
 data_Bombus$Other2_visits_z <- as.numeric(scale(log(data_Bombus$Other2_visits+1)))
-data_Bombus$APIS_freq_z <- as.numeric(scale(data_Bombus$APIS_freq))
-data_Bombus$BOMB_freq_z <- as.numeric(scale(data_Bombus$BOMB_freq))
-data_Bombus$PEPO_freq_z <- as.numeric(scale(data_Bombus$PEPO_freq))
-data_Bombus$Native_freq_z <- as.numeric(scale(data_Bombus$Native_freq))
-data_Bombus$Other1_freq_z <- as.numeric(scale(data_Bombus$Other1_freq))
-data_Bombus$Other2_freq_z <- as.numeric(scale(data_Bombus$Other2_freq))
 data_Bombus$APIS_rate_z <- as.numeric(scale(log(data_Bombus$APIS_rate+1)))
 data_Bombus$BOMB_rate_z <- as.numeric(scale(log(data_Bombus$BOMB_rate+1)))
 data_Bombus$PEPO_rate_z <- as.numeric(scale(log(data_Bombus$PEPO_rate+1)))
@@ -648,18 +624,6 @@ overdisp_fun(fit_Bombus_rate)
 fit_Bombus_rate_a <- glmer(Nosema ~ APIS_rate_z + BOMB_rate_z + PEPO_rate_z + Other2_rate_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
 summary(fit_Bombus_rate_a)
 
-
-
-# Model of visit frequency for Nosema in Bombus (Not shown in manuscript)
-fit_Bombus_freq <- glmer(Nosema ~ APIS_freq_z + BOMB_freq_z + Other1_freq_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
-fit_Bombus_freq <- glmer(Nosema ~ APIS_freq_z + BOMB_freq_z + PEPO_freq_z + Other2_freq_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
-vif(fit_Bombus_freq) # highest VIF is 4.05
-summary(fit_Bombus_freq)
-overdisp_fun(fit_Bombus_freq)
-
-# update with only Bombus impatiens
-fit_Bombus_freq_a <- glmer(Nosema ~ APIS_freq_z + BOMB_freq_z + PEPO_freq_z + Other2_freq_z + (1|Site) + (1|Site:Visit), family = binomial, data = data_Bombus)
-summary(fit_Bombus_freq_a)
 
 
 
