@@ -1,7 +1,11 @@
 # nosema-floral-visitation
-Data and code for Zbrozek et al. Honeybee visitation to shared flowers  increases Vairimorpha ceranae prevalence in bumblebees. Submitted to Ecology and Evolution, 2023.
+Data and code for Zbrozek et al. 2023. Honeybee visitation to shared flowers  increases Vairimorpha ceranae prevalence in bumblebees published in Ecology and Evolution.
+# Manuscript Citation
+Zbrozek, M, M.L. Fearon, C. Weise, E.A. Tibbetts. 2023. Honeybee visitation to shared flowers  increases Vairimorpha ceranae prevalence in bumblebees. Ecology and Evolution: 13(9):e10528. [https://doi.org/10.1002/ece3.10528](https://doi.org/10.1002/ece3.10528)
+
+# Data citation
+Zbrozek, M, M.L. Fearon, C. Weise, E.A. Tibbetts. 2023. Data from: Honeybee visitation to shared flowers increases Vairimorpha ceranae prevalence in bumblebees.
 
 
-
-### Abstract
+# Abstract
 Vairimorpha (=Nosema) ceranae is a widespread pollinator parasite that commonly infects honeybees and wild pollinators, including bumblebees. Honeybees are highly competent V. ceranae hosts and previous work in experimental flight cages suggests V. ceranae can be transmitted during visitation to shared flowers. However, the relationship between floral visitation in the natural environment and the prevalence of V. ceranae among multiple bee species has not been explored. Here, we analyzed the number and duration of pollinator visits to particular components of squash flowers—including the petals, stamen, and nectary—at six farms in southeastern Michigan, USA. We also determined the prevalence of V. ceranae in honeybees and bumblebees at each site. Our results showed that more honeybee flower contacts and longer duration of contacts with pollen and nectar was linked with greater V. ceranae prevalence in bumblebees. Honeybee visitation patterns appear to have a disproportionately large impact on V. ceranae prevalence in bumblebees even though honeybees are not the most frequent flower visitors. Floral visitation by other pollinators was not linked with V. ceranae prevalence in bumblebees.  Further, V. ceranae prevalence in honeybees was unaffected by floral visitation behaviors by any pollinator species. These results suggest that honeybee visitation behaviors on shared floral resources may be an important contributor to increased V. ceranae spillover to bumblebees in the field. Understanding how V. ceranae infection risk is influenced by pollinator behavior in the shared floral landscape is critical for reducing parasite spillover into declining native bee populations. 
