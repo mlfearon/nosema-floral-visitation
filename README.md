@@ -4,7 +4,7 @@ Data and code for Zbrozek et al. 2023. Honeybee visitation to shared flowers  in
 Zbrozek, M, M.L. Fearon, C. Weise, E.A. Tibbetts. 2023. Honeybee visitation to shared flowers  increases Vairimorpha ceranae prevalence in bumblebees. Ecology and Evolution: 13(9):e10528. [https://doi.org/10.1002/ece3.10528](https://doi.org/10.1002/ece3.10528)
 
 ## Data citation
-Zbrozek, M, M.L. Fearon, C. Weise, E.A. Tibbetts. 2023. Data from: Honeybee visitation to shared flowers increases Vairimorpha ceranae prevalence in bumblebees.
+Zbrozek, M, M.L. Fearon, C. Weise, E.A. Tibbetts. 2023. Data from: Honeybee visitation to shared flowers increases Vairimorpha ceranae prevalence in bumblebees. Dryad dataset. [https://doi.org/10.5061/dryad.vt4b8gtxt](https://doi.org/10.5061/dryad.vt4b8gtxt)
 
 
 ## Abstract
